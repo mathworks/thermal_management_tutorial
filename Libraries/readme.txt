@@ -1,0 +1,1 @@
+This directory contains all the Simscape libraries & custom blocks.
