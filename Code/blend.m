@@ -1,7 +1,7 @@
 function y = blend(y1, y2, x1, x2, x)
 %BLEND Summary of this function goes here
 %   Detailed explanation goes here
-u = (x - x1)./(x2 - x1);
+u = (x- x1)./(x2 - x1);
 transition = 3*u.^2 - 2*u.^3;
 
 
