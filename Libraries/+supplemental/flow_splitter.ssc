@@ -1,0 +1,43 @@
+component flow_splitter
+% Flow Splitter (TL)
+% This component acts as a flow multiplier and divider in a thermal liquids 
+% network. Energy and mass flow rate is divided and multiplied according to 
+% the number of connections given on A and B side. The component can be 
+% used to model systems with multiple parallel equal flow branches without 
+% explicitly modeling each path.
+nodes
+    A = foundation.thermal_liquid.thermal_liquid; % A:left
+    B = foundation.thermal_liquid.thermal_liquid; % B:right
+end
+
+parameters
+    N_A = {1, '1'}; % Number of A Connections
+    N_B = {1, '1'}; % Number of B Connections
+end
+
+variables (Access=protected)
+    % Through variables
+    mdot_A = {1e-6, 'kg/s'}; % Mass flow rate into port A
+    mdot_B = {1e-6, 'kg/s'}; % Mass flow rate into port B
+    Phi_A  = {1e-6, 'kW'  }; % Energy flow rate into port A
+    Phi_B  = {1e-6, 'kW'  }; % Energy flow rate into port B     
+end
+
+branches
+    mdot_A : A.mdot -> *;
+    mdot_B : B.mdot -> *;
+    Phi_A  : A.Phi  -> *;
+    Phi_B  : B.Phi  -> *;
+end
+
+equations
+   A.p == B.p;
+   A.T == B.T;
+
+   N_A*mdot_A + N_B*mdot_B == 0;
+   N_A*Phi_A  + N_B*Phi_B  == 0;
+    
+end
+
+
+end

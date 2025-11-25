@@ -1,0 +1,35 @@
+component thermo_splitter
+% Thermo Splitter
+% This component acts as a heat flow rate multiplier and divider in a 
+% thermal network. The total mass flow divided and multiplied according to 
+% the number of connections given on A and B side. The component can be 
+% used to mode multiple equal thermal branches without explicitly modeling 
+% each path.
+
+nodes
+    A = foundation.thermal.thermal; % A:left
+    B = foundation.thermal.thermal; % B:right
+end
+parameters
+    N_A = {1, '1'}; % Number of A Connections
+    N_B = {1, '1'}; % Number of B Connections
+end
+
+variables(Access=protected)
+    Q_A = { 0, 'J/s' }; % Heat flow A
+    Q_B = { 0, 'J/s' }; % Heat flow B
+end
+
+
+branches
+    Q_A : A.Q -> *; 
+    Q_B : B.Q -> *;
+end
+
+equations
+    A.T == B.T;
+    N_A*Q_A + N_B*Q_B == 0;
+end
+
+end
+    
