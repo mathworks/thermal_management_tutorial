@@ -7,7 +7,7 @@ cd(projRoot);
 cd('Libraries');
 if((exist('+supplemental')==7) && ~exist('supplemental_lib'))
     disp('Building Custom Simscape Library...');
-    ssc_build Custom
+    sscbuild supplemental;
     disp('Finished Building Library.');
 end
 cd(projRoot);
