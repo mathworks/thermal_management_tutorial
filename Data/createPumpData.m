@@ -1,8 +1,10 @@
 %% Load pump data extracted with Graph Data Extractor
-load(projRoot + "\Data\DataSheetPump.mat")
+load(projRoot + "\Data\DataSheetPump_Head.mat")
 pumpVdotLPM_LUT = tableData(:,1);
 pumpHeadm_LUT = tableData(:,2);
-pumpPW_LUT = tableData(:,3);
+
+load(projRoot + "\Data\DataSheetPump_Pwr.mat")
+pumpPW_LUT = interp1(tableData(:,1),tableData(:,2:end),pumpVdotLPM_LUT,"linear", "extrap");
 
 
 %% Plot resulting maps

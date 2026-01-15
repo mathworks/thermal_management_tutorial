@@ -169,14 +169,14 @@ zlabel("\DeltaP [bar]") %[output:9d4fde01]
 
 hold off %[output:9d4fde01]
 %[text] We can see that the thermal performance is better in the U-shaped configuration, but it causes a higher pressure drop, due to the longer flow path for a single bend compared to one parallel channel. The parallel channels configuration typically has a better temperature uniformity. The pressure drop is quite low, we reach the smallest device temperature for a smaller channel width and larger cold plate length and width, resulting in longer and more channels and a larger surface area. 
-%[text] Based on this, we could continue with an optimization. For the purpose of this tutorial, we will select a suitable solution from the parameter sweep. 
+%[text] Based on this, we could continue with an optimization. For the purpose of this tutorial, we will select a suitable solution from the parameter sweep, for which the final device parameter is a little below the maximum allowed temeprature to give some safety margin. 
 %[text] For the following steps, we select a design with the following parameters:
 %[text:table]{"columnWidths":[407,492],"ignoreHeader":true}
-%[text] | Length cold plate (mm) | 320 |
+%[text] | Length cold plate (mm) | 260 |
 %[text] | --- | --- |
-%[text] | Width cold plate (mm) | 320 |
-%[text] | Channel width (mm) | 2 |
-%[text] | Channel height (mm) | 8 |
+%[text] | Width cold plate (mm) | 260 |
+%[text] | Channel width (mm) | 1 |
+%[text] | Channel height (mm) | 6 |
 %[text:table]
 %[text] and additionally
 %[text:table]{"columnWidths":[407,492],"ignoreHeader":true}
