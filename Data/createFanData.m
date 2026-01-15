@@ -1,8 +1,15 @@
 %% Load static pressure gain data extracted with Graph Data Extractor
 load(projRoot+"\Data\DataSheetFan_dp.mat")
 fanSpeedRPM_LUT = [2550;2880;3100];
-fanDPPa_LUT = tableData(:,2:end)';
-fanVdotM3H_LUT = tableData(:,1)';
+fanDPPa_LUT = tableData(:,[2,4,6]);
+fanVdotM3H_LUT = tableData(:,[1,3,5]);
+
+[~, linMinIdx] = min(A(:));
+[idxMinRow, idxMinCol] = ind2sub(size(A), linMinIdx);
+
+[~, linMinIdx] = min(A(:));
+[idxMinRow, idxMinCol] = ind2sub(size(A), linMinIdx);
+
 
 %% Load brake power data extracted with Graph Data Extractor and interpolate flow rate values to ensure consistency with the pressure map
 load(projRoot+"\Data\DataSheetFan_Pwr.mat")
