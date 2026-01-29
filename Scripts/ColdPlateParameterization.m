@@ -84,7 +84,7 @@ end
 
 %%
 %[text] #### Running the parameter sweep
-%[text] The function [parsim](https://www.mathworks.com/help/releases/R2025b/simulink/slref/parsim.html?searchHighlight=parsim&s_tid=doc_srchtitle) allows to speed up the simulation by parallelizing the runs, of Parallel Computing Toolbox is not available the simulations will be carried out in serial. The Simulation Manager is visualized during the run which allows to monitor the simluations and visualize model output, for example from the post-processing function:
+%[text] The function [parsim](https://www.mathworks.com/help/simulink/slref/parsim.html) allows to speed up the simulation by parallelizing the runs, of Parallel Computing Toolbox is not available the simulations will be carried out in serial. The [Simulation Manager](https://www.mathworks.com/help/simulink/slref/simulationmanager.html) is visualized during the run which allows to monitor the simluations and visualize model output, for example from the post-processing function:
 simOut = parsim(simInp, UseFastRestart="on", ShowSimulationManager ="on" , ShowProgress="off"); %[output:681c00a8]
 %[text] ![](text:image:34c0)
 %[text] Notice that if for a given parameter set the Simulation Manager gives an error of warning for one of the runs, you can investigate the error that was thrown by selecting the repsective run in the *Simulations* tab and going to the *Diagnostics* tab.
