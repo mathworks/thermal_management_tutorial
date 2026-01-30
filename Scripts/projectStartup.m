@@ -11,3 +11,5 @@ if((exist('+supplemental')==7) && ~exist('supplemental_lib'))
     disp('Finished Building Library.');
 end
 cd(projRoot);
+
+edit Scripts\DesignCoolingSystem.m
