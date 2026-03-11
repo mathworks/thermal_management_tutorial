@@ -1,7 +1,7 @@
-%[text] ## Radiator requirements and operating conditions
-%[text] The radiator is used to cool the cooling liquid after leaving the cold plate back to its desired cooling temperature. The air is assumed to have ambient room temperature of a maximum of 20°C. A fan is used to create the airflow. The coolant inlet temperature is entering the radiator at 30°C, which is the maximum cold plate outlet temperature and should be cooled down to 25°C. The heat to be dissipated is 2kW coming from the maximum heat, the device is producing, we add the heat produced by pump plus a margin. 
+%[text] ## Radiator Requirements and Operating conditions
+%[text] The radiator is used to cool the coolant after leaving the cold plate to its desired cooling temperature. The air is assumed to have ambient room temperature of a maximum of 20°C. A fan is used to create the airflow. The coolant inlet temperature is entering the radiator at 30°C, which is the maximum cold plate outlet temperature and should be cooled down to 25°C. The heat to be dissipated is 2kW coming from the maximum power the device can produce plus the heat from pump plus a margin. 
 %[text] #### Operating conditions
-QDiss           = simscape.Value(2000, "W") + simscape.Value(10, "W");  % Heat to be dissipated by radiator
+QDiss           = simscape.Value(2000, "W") + simscape.Value(4, "W");  % Heat to be dissipated by radiator
 deltaTCoolant   = simscape.Value(5, "deltadegC");                       % Maximum temperature rise
 TCoolantIn      = simscape.Value(25, "degC");                           % Assumed coolant inlet temperature
 TCoolantOutMax  = simscape.Value(30, "degC");                           % Maximum coolant outlet temperature = Raditor inlet temperature
@@ -9,24 +9,24 @@ TAmbient        = simscape.Value(20, "degC");                           % Ambien
 pLoop           = simscape.Value(2, "bar");                             % Pressure in coolant loop
 VDotAir         = simscape.Value(0.8, "m^3/s");                         % Assumed air flow rate from fan
 pAmbient        = simscape.Value(1, "atm");                             % Ambient pressure
-%[text] #### Water properties at 25°C
+%[text] #### Water Properties at 25°C
 cpCoolant       = simscape.Value(4180.74, "J/(kg*K)");      % Coolant heat cpacity
 rhoCoolant      = simscape.Value(997.137, "kg/m^3");        % Coolant density
 muCoolant       = simscape.Value(8.89995e-4, "Pa*s");       % Coolant dynamic Pa·s
 kCoolant        = simscape.Value(0.607, "W/(m*K)");         % Coolant thermal conductivity 
 PrCoolant       = simscape.Value(6.134, "1");               % Coolant Prandtl number
-%[text] #### Air properties at 20°C and ambient pressure
+%[text] #### Air Properties at 20°C and Ambient Pressure
 cpAir           = simscape.Value(1006, "J/(kg*K)");         % Air heat cpacity
 rhoAir          = simscape.Value(1.204, "kg/m^3");          % Air density
 kinViscAir      = simscape.Value(15e-6, "m^2/s");           % Air kinematic viscosity
 PrAir           = simscape.Value(0.71, "1");                % Air Prandtl number
 kAir            = simscape.Value(0.026, "W/(m*K)");         % Air thermal conductivity 
-%[text] #### Coolant flow rate
+%[text] #### Coolant Flow Rate
 %[text] The flow rate used in the calculations is the nominal flow rate as determined in [ColdPlate](file:.\ColdPlate.mlx).
 mDot    = QDiss/(cpCoolant*deltaTCoolant); % Coolant mass flow rate
 VDot    = mDot/rhoCoolant;                 % Coolant volumetric flow rate
 %%
-%[text] #### Sizing the radiator 
+%[text] #### Sizing the Radiator 
 %[text] We will use the following layout and parameters as a design for the radiator:
 %[text] ![](text:image:73cb)
 %[text:table]{"columnWidths":[407,492],"ignoreHeader":true}
