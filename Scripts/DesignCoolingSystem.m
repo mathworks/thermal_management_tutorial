@@ -9,7 +9,7 @@
 %[text] 4. Device temperature should not exceed 50°C
 %[text] 5. Working fluid: Water
 %[text] 6. Working fluid pressurized at 2 bar
-%[text] 7. Temperature stability +/- n°C
+%[text] 7. Maintain nominal temperature between 25 den 50°C
 %[text] 8. Operating conditions: Inside at room temperature at 20°C  \
 %%
 %[text] #### Sizing and testing the cooling loop components 
@@ -19,13 +19,15 @@
 %[text] 3. [Radiator](file:.\Radiator.m) \
 %%
 %[text] #### Assembling and testing the cooling loop components - Open loop
-%[text] We start the assembly of the overall system, by connecting them in an open loop fashion. For better reuse of the individual components have been put into Subsystem References:
+%[text] Now that we have the individual components, we can start the assembly of the overall system, by connecting them in an open loop fashion. For better reuse, they have been put into Subsystem References:
 open_system("ColdPlateSubsystem")
 open_system("RadiatorSubsystem")
 open_system("PipingSubsystem")
 open_system("PumpSubsystem")
-%[text] Note that the pump model has configured the pump rotational velocity as an input, so it can in a next step be connected to a test input and further to the output of the control. Also, the pump inertia's *Rotational velocity* initial value is set to a *Priority* of *None,* since this will directly be connected to a velocity input. Similarly, the heat input to the device mass and cold plate is configured to receive an external input from a Simulink signal, so we can later define different operating scenarios. 
-%[text] All Subsystem References are connected into one model that test input into the pump is a step functions which steps up to the pumps reference speed to create the desired flow for a maximum heat load. The system is initialized at a pressurized at 2 bar, and at the desired coolant inlet temperature of 25°C. The .mat file that is loaded contains all necessary parameters that were also created in the scripts parameterizing the cold plate, pump and radiator.  **(NEEDS EDITS)**
+%[text] Note that the pump model has configured the pump rotational velocity as an input, so it can in a next step be connected to a test input and further to the output of the control. Also, the pump inertia's $\\text{Rotational velocity}$ initial value is set to a  $\\text{Priority}$of $\\text{None}$*,* since this will directly be connected to a velocity input. Similarly, the heat input to the device mass and cold plate is configured to receive an external input from a Simulink signal, so we can later define different operating scenarios. 
+%[text] All Subsystem References are connected into one model that test input into the pump is a step functions which steps up to the pumps reference speed to create the desired flow for a maximum heat load. The system is initialized at a pressurized at 2 bar, and at the desired coolant inlet temperature of 25°C. The [coolingSystemParams.mat.](file:..\Data\coolingSystemParams.mat) file that is loaded contains all necessary parameters that were also created in the scripts parameterizing the cold plate, pump and radiator. 
+%[text] Next, we connect all the Subsystem References from above into a single model with open boundary conditions (example\_System\_Assembly.slx). In this model, the Inlet Boundary Conditions are set to 2 bar and 25 °C. We actuate the pump to a speed that produces the desired flow rate at the maxmimum design heat load. We use a step function so the system can start in a relaxed state. All the parameters we have created for the subsystems during sizing are loaded from [coolingSystemParams.mat.](file:..\Data\coolingSystemParams.mat) We then simulate the model and extract the temperature and pressure profiles for key components of the system.
+%[text] 
 load(projRoot+"\Data\coolingSystemParams.mat")
 open_system("example_System_Assembly")   
 %[text] ![](text:image:2aaa)
@@ -78,12 +80,12 @@ MeasurementValues   = [VDotSim(end);TDeviceSim(end);TCPInletSim(end);TCPOutletSi
 
 outputTable = table(Measurement, MeasurementValues);
 disp(outputTable) %[output:2aedc259]
-%[text] The table shows the temperatures and pressures staying well within the expected values. 
+%[text] The table shows the temperatures and pressures staying well within the expected ranges from our requirements. 
 %%
 %[text] #### Assembling and testing the cooling loop components - Closed loop
-%[text] Next, we can close the fluid loop and remove the constant boundary condition (the reservoirs)
+%[text] Now that we’re satisfied with the open-loop model response, we can close the fluid loop by removing the Inlet and Outlet Boundary Condition blocks and connecting the B port of Piping subsystem to the A port of the Pump subsystem. This closed-loop model will allow us to start designing our controls for the system. Having the loop closed is a substantial change from open boundary conditions because the total amount of fluid in the system becomes finite. When we close the loop, we need to add a tank or accumulator to ensure there is enough capacity in the system to absorb pressure and temperature fluctuations from the dynamics of the system.
 open_system("example_System_Assembly_ClosedLoop")   
-%[text] Notice that in this version, the piping subsystem includes the accumulator component as parematerized in [Pump.m](file:.\Pump.m). **(ALSO NOTES ON TOTAL FLUID CAPACITY FOR UNGROUNDED NETWORK.)**
+%[text] In this version, the piping subsystem includes the accumulator component which we  parameterized in the final section of [Pump.m](file:.\Pump.m).
 open_system("example_System_Assembly_ClosedLoop/PipingAccumulator")   
 %[text] ![](text:image:7366)
 
