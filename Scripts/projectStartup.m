@@ -1,3 +1,4 @@
+%% 
 % project root folder
 proj = currentProject;
 projRoot = proj.RootFolder;
