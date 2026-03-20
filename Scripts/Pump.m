@@ -1,6 +1,6 @@
 %[text] ## **Pump Sizing**
 %[text] #### **Additional Piping, Fittings and Radiatior**
-%[text] In the previous sections [ColdPlate](file:.\ColdPlate.mlx) we have already determined expected pressure losses at nominal conditions for the cold plate. Adding to that, there will be additional pressure losses from pipings, fittings and radiator. We will determine length of piping and the aggregated equivalent length of additional fittings. We are assuming an overall piping length of 3 m and we will roughly account for the equivalent length of 4 90° elbow bends. 
+%[text] In the previous sections [ColdPlate](file:.\ColdPlate.m) we have already determined expected pressure losses at nominal conditions for the cold plate. Adding to that, there will be additional pressure losses from pipings, fittings and radiator. We will determine length of piping and the aggregated equivalent length of additional fittings. We are assuming an overall piping length of 3 m and we will roughly account for the equivalent length of 4 90° elbow bends. 
 %[text] Only a small pressure drop is expected for the radiator, we will add a margin to the overall pressure drop to account for this. 
 %[text:table]{"ignoreHeader":true}
 %[text] | Piping length (m) | 3 |
@@ -44,7 +44,7 @@ disp(dpPiping(end)) %[output:563069d2]
 
 %%
 %[text] #### Pump Parameterization
-%[text] The overall pressure drop determined for the cold plate (in [ColdPlate](file:.\ColdPlate.mlx)) and the additional piping is roughly 0.35 bars. Adding a margin to account for uncertainties as well as the pressure losses caused by the radiator, we will work with a overall pressure loss value of 0.4 bars. The system will be modeled using a [**Centrifugal Pump (TL)**](https://www.mathworks.com/help/hydro/ref/centrifugalpumptl.html) which offers several different parameterization options. 
+%[text] The overall pressure drop determined for the cold plate (in [ColdPlate](file:.\ColdPlate.m)) and the additional piping is roughly 0.35 bars. Adding a margin to account for uncertainties as well as the pressure losses caused by the radiator, we will work with a overall pressure loss value of 0.4 bars. The system will be modeled using a [**Centrifugal Pump (TL)**](https://www.mathworks.com/help/hydro/ref/centrifugalpumptl.html) which offers several different parameterization options. 
 %[text] We will work with a representative vendor data sheet and extract the pump curves for use in the Simscape block. The $\\text{Pump parameterization} $is set to $\\text{1D tabulated data - head and break power vs. capacity at reference speed}$. With this setting, the pump head and break power and respective capacity will be provided as a lookup table. The data sheet used is:
 %[text] ![](text:image:9388)
 %[text] 
