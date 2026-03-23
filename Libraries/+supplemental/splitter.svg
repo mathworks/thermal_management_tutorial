@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:d="http://www.mathworks.com/blockgraphics" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg" width="595" height="841" viewBox="0 0 595.276 841.89" class="st3" d:options="Foreground:PortStyled;StrokeScaling:PortStyled;StrokeScalingOnResize:NonScaling;LineExtension:On;Rotate:On;Resize:FitToBlock;Frame:Off;Clipping:None;PreAdjustStrokeWidth:Normalized;Port:Auto Majority;" color-interpolation-filters="sRGB" xml:space="preserve" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/">
+	<defs>
+		<style>
+			.st1 {
+				fill:#ffffff;stroke:#e6bb63;stroke-linecap:round;stroke-linejoin:round;stroke-width:4
+			}
+			.st2 {
+				fill:#e6bb63;stroke:#e6bb63;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24
+			}
+			.st3 {
+				fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3
+			}
+					</style>
+	</defs>
+	<g id="part" title="part_0" ie-ports="left:foundation-thermal_liquid-thermal_liquid,top:,right:foundation-thermal_liquid-thermal_liquid,bottom:">
+		<rect id="rect" class="rect" x="0" y="0" width="595" height="841" rx="0" ry="0"/>
+		<g id="group_1" v:groupContext="shape" v:mID="2" d:options="PreserveAspect:On;">
+			<title>
+				Multiplication Sign			</title>
+		</g>
+		<line id="line" class="line" x1="0" y1="0" x2="595" y2="841"/>
+		<line id="line_56" class="line" x1="0" y1="841" x2="595" y2="0"/>
+	</g>
+</svg>
