@@ -1,4 +1,4 @@
-%[text] # **Pump Sizing**
+%[text] # Pump Sizing
 %[text] In this section, we will determine the size requirement for the system pump based on all of the expected resistances of the flow paths through it. We begin by characterizing the losses due to friction in the elements. We then select an appropriately sized pump and use its datasheet to parameterize it in our model.
 %[text] ## Additional Piping, Fittings and Radiator
 %[text] In the previous section [ColdPlate](file:.\ColdPlate.m) we determined expected pressure losses at nominal conditions for the cold plate. Adding to that, there will be additional pressure losses from piping, fittings and the radiator. We will determine length of piping and the aggregated equivalent length of additional fittings. We are assuming an overall piping length of 3 m and we will roughly account for the equivalent length of 4 90° elbow bends. 
