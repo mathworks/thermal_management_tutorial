@@ -17,8 +17,6 @@ channelMargin       = simscape.Value( 10, "mm");
 %%
 %[text] ### Parameter Sweep for Cold Plate Configuration
 %[text] To compare the two configurations it is convenient to place them together in a single model. This will allow us to provide the same boundary conditions to both models at the same time.
-projRoot = currentProject().RootFolder;
-load(projRoot + "\Data\pumpParams.mat")
 open_system("example_compareColdPlates")
 %[text] 
 %[text] ![](text:image:9b96)

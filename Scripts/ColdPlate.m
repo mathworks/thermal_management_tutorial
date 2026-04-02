@@ -2,6 +2,7 @@
 %[text] In this section we will create a cold plate from scratch using a mixture of shipping components and custom components. First, we'll perform some static sizing calculations in MATLAB to get an idea of what the parameters and constraints should be. Next we'll do a trade study for two proposed architectures and choose the best for our needs. Along the way, we'll present some things to consider while working with [Thermal Liquid (TL)](https://www.mathworks.com/help/releases/R2026a/simscape/ug/thermal-liquid-modeling-workflow.html) systems.
 %[text] ## Cold Plate Requirements and Operating Conditions
 %[text] We need our cold plate to remove a maximum heat load of 2000 W. Per our requirements, we will use water as our working fluid. To maintain optimal operation, we must ensure that the coolant enters the cold plate at a temperature no higher than 25°C, and that its outlet temperature stays below 30°C. Our coolant loop operates at a pressure of 2 bar, and we must make sure the temperature of the device never exceeds 50°C during use.
+initializeParameters("ColdPlate")                  % Loads default values as backup
 %[text] #### Operating Conditions
 QDiss           = simscape.Value(2000, "W");         % Heat load
 deltaTCoolant   = simscape.Value(5, "deltadegC");    % Maximum temperature rise allowed

@@ -10,7 +10,8 @@
 %[text] | Ratio of aggregate equivalent length of local resistances to hydraulic diameter  | 4\*60 |
 %[text] | Piping roughness ($\\mu${"editStyle":"visual"}m) | 15 |
 %[text:table]
-%%
+%[text] 
+initializeParameters("Pump")                  % Loads default values as backup
 %[text] ## Determine Pressure Drop for Additional Piping
 pipingD         = simscape.Value(8, "mm");    % Additional diameter
 pipingDh        = pipingD;                    % Hydraulic diameter
@@ -22,8 +23,6 @@ pipingArea      = pi*(pipingD/2)^2;           % Additional elements cross-sectio
 pipingRoughness = simscape.Value(15e-6, "m"); % Piping roughness
 %[text] Determine pressure loss in Simscape model
 open_system("example_Piping")
-projRoot = currentProject().RootFolder;
-load(projRoot + "\Data\pumpParams.mat")
 %[text] ![](text:image:7e6b)
 %[text] Again, we are using a **Pipe (TL)** block to represent the additional piping and fitting elements. The pipe geometry is parameterized the above values. As in previous models we set the cross-sectional areas of connected ports to similar values. Here, this is chosen to be the piping cross-sectional area. 
 simInp = Simulink.SimulationInput("example_Piping");
@@ -44,7 +43,6 @@ legend("p_{Coolant,In}","p_{Coolant,Out}") %[output:94e4ff74]
 hold off %[output:94e4ff74]
 
 disp(dpPiping(end)) %[output:085d5d1d]
-
 %%
 %[text] ## Pump Parameterization
 %[text] The overall pressure drop determined for the cold plate (in [ColdPlate](file:.\ColdPlate.m)) and the additional piping is roughly 0.35 bars. Adding a margin to account for uncertainties as well as the pressure losses caused by the radiator, we will work with a overall pressure loss value of 0.4 bars. The system will be modeled using a [Centrifugal Pump (TL)](https://www.mathworks.com/help/hydro/ref/centrifugalpumptl.html) which offers several different parameterization options. 
@@ -97,7 +95,6 @@ figure %[output:611a7ee3]
 plot(speedPump,effPump*100); %[output:611a7ee3]
 ylabel("Pump efficiency [%]") %[output:611a7ee3]
 xlabel("Pump speed [rpm]") %[output:611a7ee3]
-
 %[text] In the speed range tested for the given pressure load, pump created between roughly 4 and 8 lpm. We determined an operating point of 5.75 lpm, for the desired cooling capacity. 
 %[text] From the plot we can see, that this relates to roughly 2950 rpm.
 pumpSpeed   = simscape.Value(2950, "rpm");
