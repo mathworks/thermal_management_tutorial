@@ -1,5 +1,9 @@
 %[text] # Liquid Cooling System Design with Simscape Fluids™
-%[text] In this tutorial, we will demonstrate how to construct, parameterize and analyze a liquid cooling system with the Simscape Thermal Liquid (TL) and Moist Air (MA) domains. We will provide best practices for working with models and ensuring they meet some given engineering requirements. The example we will work through is a cooling system for an X-ray tube assembly. Generally, this assembly could be thought of as a generic electronic heat load that needs to be thermally regulated, e.g., motors, batteries, engines, etc., but we use the X-ray system for the sake of concreteness and simplicity. A schematic of the system construct is shown in the figure below. It consists of a cold plate for the device cooling, a liquid-air heat exchanger (radiator + fan) an accumulator and a pump. 
+%[text] In this tutorial, we will demonstrate how to construct, parameterize and analyze a liquid cooling system with the Simscape Thermal Liquid (TL) and Moist Air (MA) domains. We will provide best practices for working with models and ensuring they meet some given engineering requirements. If you are new to MATLAB, Simulink or Simscape, we recommend walking through the Onramp tutorials first:
+%[text] - [MATLAB Onramp](https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted)
+%[text] - [Simulink Onramp](https://matlabacademy.mathworks.com/details/simulink-onramp/simulink)
+%[text] - [Simscape Onramp](https://matlabacademy.mathworks.com/details/simscape-onramp/simscape) \
+%[text] The example we will work through is a cooling system for an X-ray tube assembly. Generally, this assembly could be thought of as a generic electronic heat load that needs to be thermally regulated, e.g., motors, batteries, engines, etc., but we use the X-ray system for the sake of concreteness and simplicity. A schematic of the system construct is shown in the figure below. It consists of a cold plate for the device cooling, a liquid-air heat exchanger (radiator + fan) an accumulator and a pump. 
 %[text] 
 %[text] 
 %[text] ![](text:image:0ad8)
@@ -212,7 +216,15 @@ legend("\omegaPump_{Commanded}","Fan_{Commanded}") %[output:785b45e3]
 %[text] This figure shows the commands sent to the Pump and Fan during the simulation. As we can see, the devices turn on and off in response to the thermal measurements. 
 %%
 %[text] ## Next Steps
-%[text]  
+%[text] Attend a training course to learn more: 
+%[text] - Instructor-led Simscape training: [Modeling Physical Systems with Simscape](https://www.mathworks.com/learn/training/modeling-physical-systems-with-simscape.html)
+%[text] - Instructor-led Simscape Fluids training: [Modeling Fluids Systems with Simscape](https://www.mathworks.com/learn/training/modeling-fluid-systems-with-simscape.html) \
+%[text] Suppose the system is operating in warmer conditions, and it might be necessary to offload the heat to a refrigerations system. 
+%[text] - Learn more in tutorial [Model a Refrigeration Cylce](https://www.mathworks.com/help/hydro/ug/modeling-a-refrigeration-cycle.html)
+%[text] - Related instructor-led training: [Modeling Refrigeration Systems with Simscape ](https://www.mathworks.com/learn/training/modeling-refrigeration-systems-with-simscape.html) \
+%[text] Simscape supports C-code generation to deploy to other simulation environments, including hardware-in-the-loop systems:
+%[text] - More about configuring Simscape models for real-time simulations: [Real-Time Simulations ](https://www.mathworks.com/help/releases/R2025b/simscape/real-time-simulation.html?s_tid=CRUX_lftnav)
+%[text] - Tutorial on setting up a isothermal liquid domain model for real-time simulation: [Simscape Simulation of Fluid Power Systems](https://www.mathworks.com/matlabcentral/fileexchange/182270-simscape-simulation-of-fluid-power-systems?s_tid=srchtitle) \
 %[text]  
 
 %[appendix]{"version":"1.0"}
