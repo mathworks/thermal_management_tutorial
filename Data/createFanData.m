@@ -2,8 +2,8 @@
 %% Load static pressure gain data extracted with Graph Data Extractor
 load(projRoot+"\Data\DataSheetFan_dp.mat")
 fanSpeedRPM_LUT = [2150;2450;2600];
-fanDPPa_LUT = tableData(:, 2:end)';
-fanVdotM3H_LUT = tableData(:, 1);
+fanDPPa_LUT     = tableData(:, 2:end)';
+fanVdotM3H_LUT  = tableData(:, 1);
 
 
 
