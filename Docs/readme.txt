@@ -1,1 +1,1 @@
-This directory contains all the documents that are OK to distribute, e.g., PDFs.
+This directory contains related the documents, e.g., PDFs.
