@@ -95,8 +95,7 @@ simOut = parsim(simInp, UseFastRestart="on", ShowSimulationManager ="on" , ShowP
 %[text] Notice that if for a given parameter set the Simulation Manager gives an error of warning for one of the runs, you can investigate the error that was thrown by selecting the repsective run in the *Simulations* tab and going to the *Diagnostics* tab.
 %[text] We can use the Simulation manager to look at selected results during the run. Since we have defined a [postSimFcn](internal:M_9a9c) wen can access some of the derived data we extract from the logged data and attached to the simulation logging:
 %[text] ![](text:image:3315)
-%[text] 
-%[text] 
+%[text] Find the saved pre-run parameter sweep in the saves Simulation Manager session [coldPlateParameterSweep](file:..\Data\coldPlateParameterSweep.mldatx).
 %%
 %[text] #### Visualize Results
 %[text] In this section we are extracting the final device temperature as well as the pressure drop across the geometry to compare both results and select a design. 
