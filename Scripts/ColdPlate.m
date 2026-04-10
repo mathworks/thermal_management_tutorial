@@ -52,9 +52,7 @@ hold off %[output:66916f52]
 %[text] From the graph, we can verify that the outlet temperature converges to the desired maximum outlet temperature and that the internal node value is consistent with the outlet node (**B**) temperature. 
 %%
 %[text] #### Sizing the Cold Plate 
-%[text] The X-ray device will dissipate its heat through a cold plate. It must be sized in such a way that its overall thermal performance meets the requirements in terms of maximum device temperature. In a separate script we evaluate a U-shaped channel cold plate configuration vs. a parallel channel configuration for different geometric parameters. This aims to find a geometry that rejects the right amount of heat with an acceptable pressure drop. To see this in more detail investigate and run the following script:
-%[text]  [Cold Plate Parameterization](file:.\ColdPlateParameterization.m)
-%[text] In that script, we determined the parallel channel configuration was the best for our use case. We will continue with that configuration:
+%[text] The X-ray device will dissipate its heat through a cold plate. It must be sized in such a way that its overall thermal performance meets the requirements in terms of maximum device temperature. In the [Cold Plate Parameterization](file:.\ColdPlateParameterization.m) script we show a trade study for a U-shaped channel cold plate configuration vs. a parallel channel configuration for different geometric parameters. In that script, we determined the parallel channel configuration was the best for our use case. We will continue with that configuration:
 %[text] ![](text:image:0bc8)
 %[text] 
 %[text] The parameters selected (based on [Cold Plate Parameterization](file:.\ColdPlateParameterization.m)) are:
