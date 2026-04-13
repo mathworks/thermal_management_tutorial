@@ -202,7 +202,7 @@ xlabel("Fan speed [rpm]") %[output:51552f3c]
 fanSpeed  = simscape.Value(2555, "rpm");
 %%
 %[text] ## Next Steps
-%[text] - Go back to the previous step: [Pump.m](file:.\Pump.m)
+%[text] - Go back to the previous step: [Pump.m](file:.\Pump)
 %[text] - Go to main script: [Design Cooling System](file:.\DesignCoolingSystem.m) \
 
 %[appendix]{"version":"1.0"}
