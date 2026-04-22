@@ -127,7 +127,7 @@ dpColdPlate   = simscape.Value(pColdPlateIn-pColdPlateOut,"bar");
 
 figure %[output:8efb43af]
 plot(simOut.tout,[pColdPlateIn,pColdPlateOut]) %[output:8efb43af]
-ylabel("p [Pa]") %[output:8efb43af]
+ylabel("p [bar]") %[output:8efb43af]
 xlabel("Time [s]") %[output:8efb43af]
 legend("p_{Coolant,In}","p_{Coolant,Out}") %[output:8efb43af]
 hold off %[output:8efb43af]

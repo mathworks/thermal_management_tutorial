@@ -37,7 +37,7 @@ dpPiping   = simscape.Value(pPipingIn-pPipingOut, "bar");
 
 figure %[output:5b65268e]
 plot(simOut.tout,[pPipingIn,pPipingOut]) %[output:5b65268e]
-ylabel("p [Pa]") %[output:5b65268e]
+ylabel("p [bar]") %[output:5b65268e]
 xlabel("Time [s]") %[output:5b65268e]
 legend("p_{Coolant,In}","p_{Coolant,Out}") %[output:5b65268e]
 hold off %[output:5b65268e]
@@ -46,7 +46,7 @@ disp(dpPiping(end)) %[output:2fd2e159]
 %%
 %[text] ## Pump Parameterization
 %[text] The overall pressure drop determined for the cold plate (in [Cold Plate](file:.\ColdPlate.m)) and the additional piping is roughly 0.35 bars. Adding a margin to account for uncertainties as well as the pressure losses caused by the radiator, we will work with a overall pressure loss value of 0.4 bars. The system will be modeled using a [Centrifugal Pump (TL)](https://www.mathworks.com/help/hydro/ref/centrifugalpumptl.html) which offers several different parameterization options. 
-%[text] We will work with a representative vendor data sheet and extract the pump curves for use in the Simscape block. The $\\text{Pump parameterization} $is set to $\\text{1D tabulated data - head and break power vs. capacity at reference speed}$. With this setting, the pump head and break power and respective capacity will be provided as a lookup table. The data sheet used is:
+%[text] We will work with a representative vendor data sheet and extract the pump curves for use in the Simscape block. The $\\text{Pump parameterization} $is set to $\\text{1D tabulated data - head and break power vs. capacity at reference speed}$. With this setting, the pump head and brake power and respective capacity will be provided as a lookup table. The data sheet used is:
 %[text] ![](text:image:9388)
 %[text] 
 %[text] We can use the [Graph Data Extractor](https://www.mathworks.com/help/simscape/ref/graphdataextractor.html) to extract the points for the relevant pump model:
@@ -81,20 +81,20 @@ VDotPump  = simOut.simlog.Centrifugal_Pump_TL.q_A.series.values("lpm");
 speedPump = simOut.simlog.Centrifugal_Pump_TL.omega.series.values("rpm");
 effPump = simOut.simlog.Centrifugal_Pump_TL.efficiency.series.values("1");
 
-figure %[output:4f332ac8]
-yyaxis left %[output:4f332ac8]
-plot(speedPump,pLoad); %[output:4f332ac8]
-ylabel("\DeltaP [bar]") %[output:4f332ac8]
-yyaxis right %[output:4f332ac8]
-plot(speedPump,VDotPump); %[output:4f332ac8]
-ylabel("Flow rate [lpm]") %[output:4f332ac8]
-xlabel("Pump speed [rpm]") %[output:4f332ac8]
-legend("Pump \DeltaP","Pump flow rate") %[output:4f332ac8]
-grid on %[output:4f332ac8]
-figure %[output:75cf7179]
-plot(speedPump,effPump*100); %[output:75cf7179]
-ylabel("Pump efficiency [%]") %[output:75cf7179]
-xlabel("Pump speed [rpm]") %[output:75cf7179]
+figure
+yyaxis left
+plot(speedPump,pLoad);
+ylabel("\DeltaP [bar]")
+yyaxis right
+plot(speedPump,VDotPump);
+ylabel("Flow rate [lpm]")
+xlabel("Pump speed [rpm]")
+legend("Pump \DeltaP","Pump flow rate")
+grid on
+figure
+plot(speedPump,effPump*100);
+ylabel("Pump efficiency [%]")
+xlabel("Pump speed [rpm]")
 %[text] In the speed range tested for the given pressure load, the pump moved between, roughly, 4 and 8 lpm. We determined an operating point of 5.75 lpm for the desired cooling capacity. 
 %[text] From the plot we can see, that this relates to roughly 2950 rpm.
 pumpSpeed = simscape.Value(2950, "rpm");
@@ -156,11 +156,11 @@ pulseEnvelope = double(mod(t,PRI) < PW);            % Logical envelope
 tInAccumulatorTest         = t';
 pressureInAccumulatorTest  = A * pulseEnvelope'-1;  % Pressure waveform used for testing 
 
-figure %[output:1f1cd18b]
-plot(t,pressureInAccumulatorTest) %[output:1f1cd18b]
-xlabel("Time [s]") %[output:1f1cd18b]
-ylabel("[bar]") %[output:1f1cd18b]
-legend("Test input pressure") %[output:1f1cd18b]
+figure
+plot(t,pressureInAccumulatorTest)
+xlabel("Time [s]")
+ylabel("[bar]")
+legend("Test input pressure")
  
 simInp = Simulink.SimulationInput("example_AccumulatorPressure");
 simInp = simInp.setModelParameter("StopTime",string(tInAccumulatorTest(end)));
@@ -171,18 +171,18 @@ pressureAccumulator = simOut.simlog.Accumulator.p_I.series.values("bar");
 volumeAccumulator   = simOut.simlog.Accumulator.liquid_volume.series.values("l");
 massFlow            = simOut.simlog.Accumulator.mdot_A.series.values("kg/s");
  
-figure %[output:98aac097]
-yyaxis left %[output:98aac097]
-plot(simOut.tout,volumeAccumulator); %[output:98aac097]
-hold on %[output:98aac097]
-plot([simOut.tout(1),simOut.tout(end)],[accumulatorTotalVolume.value("l"),accumulatorTotalVolume.value("l")],Color = [ 0.7520, 0.3600, 0.9840], LineStyle = ":"); %[output:98aac097]
-xlabel("Time [s]") %[output:98aac097]
-ylabel("[l]") %[output:98aac097]
-yyaxis right %[output:98aac097]
-plot(simOut.tout,pressureAccumulator); %[output:98aac097]
-ylabel("[bar]") %[output:98aac097]
-legend("Volume_{Accumulator,Liquid}","Capacity", "Pressure_{Accumulator,Liquid}") %[output:98aac097]
-hold off %[output:98aac097]
+figure
+yyaxis left
+plot(simOut.tout,volumeAccumulator);
+hold on
+plot([simOut.tout(1),simOut.tout(end)],[accumulatorTotalVolume.value("l"),accumulatorTotalVolume.value("l")],Color = [ 0.7520, 0.3600, 0.9840], LineStyle = ":");
+xlabel("Time [s]")
+ylabel("[l]")
+yyaxis right
+plot(simOut.tout,pressureAccumulator);
+ylabel("[bar]")
+legend("Volume_{Accumulator,Liquid}","Capacity", "Pressure_{Accumulator,Liquid}")
+hold off
 %[text] We can see, that the liquid volume stays well within the capacity for the given pressure input. 
 %[text] Next, we will test how it behaves at thermal expansion by applying a heat source to the accumulator. 
 open_system("example_AccumulatorHeatFlow")
@@ -201,22 +201,22 @@ volumeAccumulator      = simOut.simlog.Accumulator.liquid_volume.series.values("
 temperatureAccumulator = simOut.simlog.Accumulator.T_I.series.values("degC");
 
 
-figure %[output:4e67fe7e]
-yyaxis left %[output:4e67fe7e]
-plot(simOut.tout,pressureAccumulator); %[output:4e67fe7e]
-hold on %[output:4e67fe7e]
-xlabel("Time [s]") %[output:4e67fe7e]
-ylabel("[bar]") %[output:4e67fe7e]
-yyaxis right %[output:4e67fe7e]
-plot(simOut.tout,temperatureAccumulator); %[output:4e67fe7e]
-ylabel("[°C]") %[output:4e67fe7e]
-legend("Pressure_{Accumulator,Liquid}","Temperature_{Accumulator,Liquid}") %[output:4e67fe7e]
-hold off %[output:4e67fe7e]
-figure %[output:97b28bbd]
-plot(simOut.tout,volumeAccumulator); %[output:97b28bbd]
-xlabel("Time [s]") %[output:97b28bbd]
-ylabel("[l]") %[output:97b28bbd]
-legend("Volume_{Accumulator,Liquid}") %[output:97b28bbd]
+figure
+yyaxis left
+plot(simOut.tout,pressureAccumulator);
+hold on
+xlabel("Time [s]")
+ylabel("[bar]")
+yyaxis right
+plot(simOut.tout,temperatureAccumulator);
+ylabel("[°C]")
+legend("Pressure_{Accumulator,Liquid}","Temperature_{Accumulator,Liquid}")
+hold off
+figure
+plot(simOut.tout,volumeAccumulator);
+xlabel("Time [s]")
+ylabel("[l]")
+legend("Volume_{Accumulator,Liquid}")
 %[text] For the given scenario, the fluid heats up to well over 60 °C and the pressure and volume stay well within given ranges. 
 %%
 %[text] ## Next Steps
@@ -255,24 +255,6 @@ legend("Volume_{Accumulator,Liquid}") %[output:97b28bbd]
 %[output:2fd2e159]
 %   data: {"dataType":"text","outputData":{"text":"    0.3357 (bar)\n\n","truncated":false}}
 %---
-%[output:4f332ac8]
-%   data: {"dataType":"image","outputData":{"dataUri":"data:,","height":0,"width":0}}
-%---
-%[output:75cf7179]
-%   data: {"dataType":"image","outputData":{"dataUri":"data:,","height":0,"width":0}}
-%---
 %[output:091d3465]
 %   data: {"dataType":"image","outputData":{"dataUri":"data:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAFRCAYAAABqsZcNAAAAAXNSR0IArs4c6QAAIABJREFUeF7t3T9oXdm5KPB1mwvugkpZJGlUG6axcGNIlUbTDHn+04RBF9Rd8\/BYkj1wH1PEI8nxA99ULoRxo4wDc4eLIH2KN8TFBNxGUz1klQ6kUZnHPo9jTo4lnXO29zp7re\/8Dggy0d5rrf371tL6\/J199vmXf\/zjH\/9IXgQIECBAgACBigT+RQJTUbQMlQABAgQIEBgISGBMBAIECBAgQKA6AQlMdSEzYAIECBAgQEACYw4QIECAAAEC1QlIYKoLmQETIECAAAECEhhzgAABAgQIEKhOQAJTXcgMmAABAgQIEJDAmAMECBAgQIBAdQISmOpCZsAECBAgQICABMYcIECAAAECBKoTkMBUFzIDJkCAAAECBCQw5gABAgQIECBQnYAEprqQGTABAgQIECAggTEHCBAgQIAAgeoEJDDVhcyACRAgQIAAAQmMOUCAAAECBAhUJyCBqS5kBkyAAAECBAhIYMwBAgQIECBAoDoBCUx1ITNgAgQIECBAYGESmLOzs7Szs5OOjo7eR31zczNtb2+bBQQIECBAgEBlAguTwLx79y7dv38\/PXr0KK2urlYWJsMlQIAAAQIERgUWJoE5Pj5Ojx8\/Tk+fPk1LS0tmAQECBAgQIFCxwMIkMH\/+85\/T3t5eOjg4mCmBOTk5Sc2PFwECBAgQqFFgZWUlNT\/RXguTwLx69So9fPjwffyuXbs2MZlpEpcHDx6k169fR4u76yFAgACBBRG4fv16evLkSbgkZmESmKb6cnp6mnZ3d9OVK1cG1ZjR\/z5vHjdVm7t37w4Cf\/Xq1QWZ6vO5zCYpfPbsGdsM3GwzoKY0+IeMOcs2j0C+Vofz9vDwMK2treXrqIeWFyaBGbdt7onZ2tpK+\/v7F97UO0xgIga+h7n2T12yzRcBtnlsueZxbVply7aNwEInMJNu6rWo2kyp6c5hO51Tm6PYtlGbfA7XyUZtj2DbVm7yeZFtFyKBGT4D5saNG+nWrVtp+N\/Ly8uXPgcmcuAnT\/u8RzT3F3377bfps88+C\/e+bF65ya2znWzU5giubdSmO4ftdE5tjoq8jy1EAtMEffxBduvr6+\/vh7loUkQOfJuF4BwCBAgQqEsg8j62MAlMmykXOfBtPJxDgAABAnUJRN7HJDCXzMXIga9rCRotAQIECLQRiLyPSWAkMG3WhHMIECBAoAIBCUwFQcoxxMiBz+GlTQIECBAoSyDyPqYCowJT1mozGgIECBDoTEAC0xllXQ1FDnxdkTBaAgQIEGgjEHkfU4FRgWmzJpxDgAABAhUISGAqCFKOIUYOfA4vbRIgQIBAWQKR9zEVGBWYslab0RAgQIBAZwISmM4o62oocuDrioTREiBAgEAbgcj7mAqMCkybNeEcAgQIEKhAQAJTQZByDDFy4HN4aZMAAQIEyhKIvI+pwKjAlLXajIYAAQIEOhOQwHRGWVdDkQNfVySMlgABAgTaCETex1RgVGDarAnnECBAgEAFAhKYCoKUY4iRA5\/DS5sECBAgUJZA5H1MBUYFpqzVZjQECBAg0JmABKYzyroaihz4uiJhtAQIECDQRiDyPqYCowLTZk04hwABAgQqEJDAVBCkHEOMHPgcXtokQIAAgbIEIu9jKjAqMGWtNqMhQIAAgc4EJDCdUdbVUOTA1xUJoyVAgACBNgKR9zEVGBWYNmvCOQQIECBQgYAEpoIg5Rhi5MDn8NImAQIECJQlEHkfU4FRgSlrtRkNAQIECHQmIIHpjLKuhiIHvq5IGC0BAgQItBGIvI+pwKjAtFkTziFAgACBCgQkMBUEKccQIwc+h5c2CRAgQKAsgcj7mAqMCkxZq81oCBAgQKAzAQlMZ5R1NRQ58HVFwmgJECBAoI1A5H1MBUYFps2acA4BAgQIVCAggakgSDmGGDnwOby0SYAAAQJlCUTex1RgVGDKWm1GQ4AAAQKdCUhgOqOsq6HIga8rEkZLgAABAm0EIu9jKjAqMG3WhHMIECBAoAIBCUwFQcoxxMiBz+GlTQIECBAoSyDyPqYCowJT1mozGgIECBDoTEAC0xllXQ1FDnxdkTBaAgQIEGgjEHkfU4FRgWmzJpxDgAABAhUISGAqCFKOIUYOfA4vbRIgQIBAWQKR9zEVGBWYslab0RAgQIBAZwISmM4o62oocuDrioTREiBAgEAbgcj7mAqMCkybNeEcAgQIEKhAQAJTQZByDDFy4HN4aZMAAQIEyhKIvI+FqcAcHx+nra2ttL+\/n1ZXVz+YQWdnZ2lnZycdHR29\/93m5mba3t6+cLZFDnxZS8xoCBAgQCCHQOR9LEQCM0xOfvjhh\/TixYtzE5h3796l+\/fvp0ePHp37+\/MmTuTA51go2iRAgACBsgQi72MhEpgmQHt7e4NZc1EFpqnQPH78OD19+jQtLS1NNcMiB34qAAcRIECAQNUCkfex6hOYprLy1VdfpTt37gySmIsSmGGSc3BwMHMCc+\/evXT9+vXBJF5ZWRn8eBEgQIAAgRIFTk5OUvPTvN6+fZsePHiQDg8P09raWonDbT2m6hOYV69eDS7+k08+ufQemOa4hw8fvoe6du1ampTMDDPXUd0mmWl+vAgQIECAQIkCz549S83P6EsCU1ikmreFXr58mb788stBtnnZTbxNdeb09DTt7u6mK1euDKo1o\/993qUNE5gnT56kq1evqsAUFn\/DIUCAAIEPBUYrMK9fvx4kMxKYwmZKk4TcvHlzUBab9Cmk8aFPc3zk9w4LC6XhECBAgEAGgcj7WLVvITX3vmxsbKQ3b958EPJpMs1pbuqNHPgM60STBAgQIFCYQOR9rNoEZpaKyvBj1jdu3Ei3bt1Kw\/9eXl72HJjCFpvhECBAgEB3AhKY7iyztTT+ltAwSWk+ndS8xTT+ILv19fX398NcNKjIgc8WCA0TIECAQDECkfexMBWYHLMlcuBzeGmTAAECBMoSiLyPSWAumWuRA1\/WEjMaAgQIEMghEHkfk8BIYHKsGW0SIECAQAECEpgCgtDHECIHvg9PfRIgQIDAfAUi72MqMCow811NeiNAgACBuQlIYOZGXVZHkQNflrTRECBAgEAOgcj7mAqMCkyONaNNAgQIEChAQAJTQBD6GELkwPfhqU8CBAgQmK9A5H1MBUYFZr6rSW8ECBAgMDcBCczcqMvqKHLgy5I2GgIECBDIIRB5H1OBUYHJsWa0SYAAAQIFCEhgCghCH0OIHPg+PPVJgAABAvMViLyPqcCowMx3NemNAAECBOYmIIGZG3VZHUUOfFnSRkOAAAECOQQi72MqMCowOdaMNgkQIECgAAEJTAFB6GMIkQPfh6c+CRAgQGC+ApH3MRUYFZj5ria9ESBAgMDcBCQwc6Muq6PIgS9L2mgIECBAIIdA5H1MBUYFJsea0SYBAgQIFCAggSkgCH0MIXLg+\/DUJwECBAjMVyDyPqYCowIz39WkNwIECBCYm4AEZm7UZXUUOfBlSRsNAQIECOQQiLyPqcCowORYM9okQIAAgQIEJDAFBKGPIUQOfB+e+iRAgACB+QpE3sdUYFRg5rua9EaAAAECcxOQwMyNuqyOIge+LGmjIUCAAIEcApH3MRUYFZgca0abBAgQIFCAgASmgCD0MYTIge\/DU58ECBAgMF+ByPuYCowKzHxXk94IECBAYG4CEpi5UZfVUeTAlyVtNAQIECCQQyDyPqYCowKTY81okwABAgQKEJDAFBCEPoYQOfB9eOqTAAECBOYrEHkfU4FRgZnvatIbAQIECMxNQAIzN+qyOooc+LKkjYYAAQIEcghE3sdUYFRgcqwZbRIgQIBAAQISmAKC0McQIge+D099EiBAgMB8BSLvYyowKjDzXU16I0CAAIG5CUhg5kZdVkeRA1+WtNEQIECAQA6ByPuYCowKTI41o00CBAgQKEBAAlNAEPoYQuTA9+GpTwIECBCYr0DkfUwFRgVmvqtJbwQIECAwNwEJzNyoy+oocuDLkjYaAgQIEMghEHkfU4FRgcmxZrRJgAABAgUISGAKCEIfQ4gc+D489UmAAAEC8xWIvI8tZAXm+Pg4bW1tpf39\/bS6unrhbIoc+PkuIb0RIECAQB8CkfexhUtgzs7O0s7OTvrhhx\/SixcvJDB9rCh9EiBAgMBcBCQwc2GeTydNMPf29gadqcDMx1wvBAgQINCPgASmH\/fOe3337l366quv0p07dwZJjASmc2INEiBAgEBBAhKYgoLxMUN59erV4PRPPvlkpntg7t27l65fvz44d2VlZfDjRYAAAQIEShQ4OTlJzU\/zevv2bXrw4EE6PDxMa2trJQ639ZgW5h6Y5sbdly9fpi+\/\/HIQ2Flu4h3VbZKZ5seLAAECBAiUKPDs2bPU\/Iy+JDAlRmrKMTVvGd28eXOQgc76KaQnT56kq1evqsBMae0wAgQIEOhPYLQC8\/r160EyI4HpLx4f1XNz78vGxkZ68+bNB+1cFtTI7x1+FKiTCRAgQKAKgcj72MK8hTQ602apwNz+t39P6\/\/zf6eVlf9fgfEiQIAAAQK1CJycvE3\/\/fw36Q\/\/+b\/cA1NL0C4b5ywJzP\/496\/S0qf\/EeGyXQMBAgQILJhA83bSv\/7f\/5P+6z9uS2AWKfaRS2+LFEfXSoAAgUUViLyPLeRbSNNO5MiBn9bAcQQIECBQr0DkfUwCc8m8jBz4epejkRMgQIDAtAKR9zEJjARm2nXgOAIECBCoTEACU1nAuhpu5MB3ZaQdAgQIEChXIPI+pgKjAlPuyjMyAgQIEPgoAQnMR\/HVe3LkwNcbFSMnQIAAgWkFIu9jKjAqMNOuA8cRIECAQGUCEpjKAtbVcCMHvisj7RAgQIBAuQKR9zEVGBWYcleekREgQIDARwlIYD6Kr96TIwe+3qgYOQECBAhMKxB5H1OBUYGZdh04jgABAgQqE5DAdBSwd+\/epY2NjfTmzZuZWrx27Vr67rvvZjqni4MjB74LH20QIECAQNkCkfexuVZghgnM9vb21N+K2eDv7e1JYMpeI0ZHgAABAgUKSGA6CsqPP\/6YPv3007S8vJz+8Ic\/pKWlpYktS2AmEjmAAAECBAicKyCB6XBiNNWU58+f\/1OLzVtEBwcHUyU0HQ5lYlORAz\/x4h1AgAABAtULRN7H5voW0nkz4fj4OH3++efp9PT0\/a9LSWgiB776VekCCBAgQGCiQOR9rPcE5jz9V69epW+++ab3qkzkwE+c9Q4gQIAAgeoFIu9jRSQwZ2dnaWdnJx0dHQ0my\/r6etrd3U1XrlzpdfJEDnyvsDonQIAAgbkIRN7Hek1gRu+HKeVto9EZFTnwc1k5OiFAgACBXgUi72NzT2Cat4cePnw4CGjzaaQXL16k1dXVXgN8UeeRA18kuEERIECAQKcCkfexuSYwbZ4D02kkZ2wscuBnpHA4AQIECFQoEHkfm2sC08R+9H4XFZgKV4MhEyBAgEA1AhKYTKEa\/Qh1KTfujl5q5MBnCqlmCRAgQKAggcj72NwrMBfFdfTemM3NzdR83UDfr8iB79tW\/wQIECCQXyDyPlZMAjMaRs+ByT+p9UCAAAEC8QUkMBljfN6TeEt5Oyly4DOGVNMECBAgUIhA5H1s7hWY874LqZSEZXy+RQ58IWvLMAgQIEAgo0DkfWyuCczwY9RNrEr88kYJTMZVpGkCBAgQmLuABKYj8jbPgWnwm6rNd99919Eopm8mcuCnV3AkAQIECNQqEHkf66UC03zCaG1tbar5IIGZislBBAgQIEDgAwEJTEeTYliBefPmzUwtNt+TpAIzE5mDCRAgQIBAksAs6CSIHPgFDanLJkCAwEIJRN7H5voWUm2zJnLga4uF8RIgQIDA7AKR9zEJzCXzIXLgZ18GziBAgACB2gQi72MSGAlMbevReAkQIEBgSgEJzJRQ0Q6LHPhosXI9BAgQIPChQOR9TAVGBcaaJ0CAAIGgAhKYoIGddFmRAz\/p2v2eAAECBOoXiLyPqcCowNS\/Ql0BAQIECJwrIIFZ0IkROfALGlKXTYAAgYUSiLyPqcCowCzUYnaxBAgQWCQBCcwiRXvkWiMHfkFD6rIJECCwUAKR9zEVGBWYhVrMLpYAAQKLJCCBKTTaZ2dnaWdnJx0dHQ1GuLm5mZpvuj7vNX7spOOb30cOfKEhNSwCBAgQ6FAg8j5WdQVmb29vEOYmaRl+0\/Xt27fTrVu3Pgh\/8\/v79++nR48epdXV1ammR+TATwXgIAIECBCoWiDyPlZ1AjM+q0YTmvHfHR8fp8ePH6enT5+mpaWlqSZk5MBPBeAgAgQIEKhaIPI+FiaBGVZgmmrM2traBxOuCWKT4BwcHEhgql6OBk+AAAEC0wpIYKaV6um4JjF5\/vx5Wl9fT7u7u+nKlSsfjOTVq1fp4cOH7\/\/\/a9euTUxmhoG\/d+9eun79+uDclZWVwY8XAQIECBAoUeDk5CQ1P83r7du36cGDB+nw8PDcf9yXOP5pxxSmAtNccJPInJ6enpvEjP\/usmOHeMMEZhSzSWaaHy8CBAgQIFCiwLNnz1LzM\/qSwJQYqZExNfe5bG1tpf39\/Yk36k5z7DCBefLkSbp69aoKTOHxNzwCBAgQSIPqy7AC8\/r160EyI4EpfGbMcp\/LNDf1Rn7vsPBQGh4BAgQIdCAQeR+r+i2k0U8dDZ\/zsry8\/MGzYIa\/u3HjxuAj1pcdOzpfIge+g3WhCQIECBAoXCDyPlZ1AjP+cLrRm3iHv7tz587gxqXLjr1o\/kUOfOFrzvAIECBAoAOByPtY1QlMB7G9tInIgc9tp30CBAgQ6F8g8j4mgblkfkUOfP\/LyggIECBAILdA5H1MAiOByb1+tE+AAAECPQlIYHqC77vbyIHv21b\/BAgQIJBfIPI+pgKjApN\/BemBAAECBHoRkMD0wt5\/p5ED37+uERAgQIBAboHI+5gKjApM7vWjfQIECBDoSUAC0xN8391GDnzftvonQIAAgfwCkfcxFRgVmPwrSA8ECBAg0IuABKYX9v47jRz4\/nWNgAABAgRyC0Tex1RgVGByrx\/tEyBAgEBPAhKYnuD77jZy4Pu21T8BAgQI5BeIvI+pwKjA5F9BeiBAgACBXgQkML2w999p5MD3r2sEBAgQIJBbIPI+pgKjApN7\/WifAAECBHoSkMD0BN93t5ED37et\/gkQIEAgv0DkfUwFRgUm\/wrSAwECBAj0IiCB6YW9\/04jB75\/XSMgQIAAgdwCkfcxFRgVmNzrR\/sECBAg0JOABKYn+L67jRz4vm31T4AAAQL5BSLvYyowKjD5V5AeCBAgQKAXAQlML+z9dxo58P3rGgEBAgQI5BaIvI+pwKjA5F4\/2idAgACBngQkMD3B991t5MD3bat\/AgQIEMgvEHkfU4FRgcm\/gvRAgAABAr0ISGB6Ye+\/08iB71\/XCAgQIEAgt0DkfUwFRgUm9\/rRPgECBAj0JCCB6Qm+724jB75vW\/0TIECAQH6ByPuYCowKTP4VpAcCBAgQ6EVAAtMLe\/+dRg58\/7pGQIAAAQK5BSLvYyowKjC514\/2CRAgQKAnAQlMT\/B9dxs58H3b6p8AAQIE8gtE3sdUYFRg8q8gPRAgQIBALwISmF7Y++80cuD71zUCAgQIEMgtEHkfU4FRgcm9frRPgAABAj0JSGB6gu+728iB79tW\/wQIECCQXyDyPqYCowKTfwXpgQABAgR6EZDA9MLef6eRA9+\/rhEQIECAQG6ByPuYCowKTO71o30CBAgQ6ElAAtMTfN\/dRg5837b6J0CAAIH8ApH3MRUYFZj8K0gPBAgQINCLgASmF\/b+O40c+P51jYAAAQIEcgtE3sdUYFRgcq8f7RMgQIBATwISmJ7g++42cuD7ttU\/AQIECOQXiLyPLUwF5uzsLO3s7KSjo6PBjNnc3Ezb29uXzp7Igc+\/bPRAgAABAn0LRN7HFiaB2dvbG8yjJml59+5d2tjYSLdv3063bt26cH5FDnzfi0r\/BAgQIJBfIPI+tjAJzPg0GU1oLppCkQOff9nogQABAgT6Foi8jy1kAjOswDTVmLW1NRWYvleY\/gkQIEAgi4AEJgtrP402lZfnz5+n9fX1tLu7m65cuTIxgbl37166fv364LiVlZXBjxcBAgQIEChR4OTkJDU\/zevt27fpwYMH6fDw8NJ\/sJd4HZPGtJAVmAalSWROT08vTWKGmesoYpPMND9eBAgQIECgRIFnz56l5mf0JYEpMVItx3R8fJy2trbS\/v5+Wl1dPbeVYQLz5MmTdPXqVRWYltZOI0CAAIH5CYxWYF6\/fj1IZiQw8\/PP3lOTnDRVmIODg7S0tHRpAhMx8NmBdUCAAAECvQu4B6b3EHz8AEY\/dTR8Jszy8vKlz4KJHPiPF9UCAQIECJQuEHkfW5h7YMYfZDfLTbwqMKUvUeMjQIAAgfMEJDALOi8iB35BQ+qyCRAgsFACkfexhanAtJmxkQPfxsM5BAgQIFCXQOR9TAJzyVyMHPi6lqDREiBAgEAbgcj7mARGAtNmTTiHAAECBCoQkMBUEKQcQ4wc+Bxe2iRAgACBsgQi72MqMCowZa02oyFAgACBzgQkMJ1R1tVQ5MDXFQmjJUCAAIE2ApH3MRUYFZg2a8I5BAgQIFCBgASmgiDlGGLkwOfw0iYBAgQIlCUQeR9TgVGBKWu1GQ0BAgQIdCYggemMsq6GIge+rkgYLQECBAi0EYi8j6nAqMC0WRPOIUCAAIEKBCQwFQQpxxAjBz6HlzYJECBAoCyByPuYCowKTFmrzWgIECBAoDMBCUxnlHU1FDnwdUXCaAkQIECgjUDkfUwFRgWmzZpwDgECBAhUICCBqSBIOYYYOfA5vLRJgAABAmUJRN7HVGBUYMpabUZDgAABAp0JSGA6o6yrociBrysSRkuAAAECbQQi72MqMCowbdaEcwgQIECgAgEJTAVByjHEyIHP4aVNAgQIEChLIPI+pgKjAlPWajMaAgQIEOhMQALTGWVdDUUOfF2RMFoCBAgQaCMQeR9TgVGBabMmnEOAAAECFQhIYCoIUo4hRg58Di9tEiBAgEBZApH3MRUYFZiyVpvRECBAgEBnAhKYzijraihy4OuKhNESIECAQBuByPuYCowKTJs14RwCBAgQqEBAAlNBkHIMMXLgc3hpkwABAgTKEoi8j6nAqMCUtdqMhgABAgQ6E5DAdEZZV0ORA19XJIyWAAECBNoIRN7HVGBUYNqsCecQIECAQAUCEpgKgpRjiJEDn8NLmwQIECBQlkDkfUwFRgWmrNVmNAQIECDQmYAEpjPKuhqKHPi6ImG0BAgQINBGIPI+pgKjAtNmTTiHAAECBCoQkMBUEKQcQ4wc+Bxe2iRAgACBsgQi72MqMCowZa02oyFAgACBzgQkMJ1R1tVQ5MDXFQmjJUCAAIE2ApH3MRUYFZg2a8I5BAgQIFCBgASmgiDlGGLkwOfw0iYBAgQIlCUQeR9TgVGBKWu1GQ0BAgQIdCYggemMsq6GIge+rkgYLQECBAi0EYi8j6nAqMC0WRPOIUCAAIEKBCQwhQbp3bt3aWNjI71582YwwvX19bS7u5uuXLnywYjPzs7Szs5OOjo6ev+7zc3NtL29feHVRQ58oSE1LAIECBDoUCDyPlZtBWaYkNy4cSPdunUrDf97eXn53KSkSXbu37+fHj16lFZXV6eaHpEDPxVAxoNOTk7St99+mz777LO0srKSsafFa5ptnphzzePatMo2n23kfazaBOa8cL969Sp9\/\/3351Zhjo+P0+PHj9PTp0\/T0tLSVLMlcuCnAsh4ENt8uGzz2HLN49q0ypZtG4GFSWCaBbK3t5cODg4kMG1mSsfn+IPVMehIc2zz2HLN4yqByeca3TZMAjO8H+b27duDt5TGX0115uHDh+\/\/72vXrk1MZoZ\/sO7du5euX7+ed5YtWOtv375NDx48SGy7Dzzb7k2bFrnmcWWbz3XU9vDwMK2treXtbM6th0hghve\/NHYX3cTbVF9OT0\/f\/378v89zb96XbTbZ169fzzksuiNAgAABAt0INP8Af\/LkSbj7DatPYKZJXs6bAs09MVtbW2l\/f\/\/Sm3qbJKb58SJAgAABAjUKNB+UiPhhiaoTmEmfPLpsorW5qbfGiWvMBAgQIEAgokDVCcw0bwM1QZv1I9cRA+2aCBAgQIBAJIFqE5jxh9gNgzK8Obd5mF3z4Lo7d+4Mblwaf5DdZQ+9ixRg10KAAAECBCIKVJvARAyGayJAgAABAgSmE5DATOfkKAIECBAgQKAgAQlMQcEwFAIECBAgQGA6AQnMdE6OIkCAAAECBAoSkMAUFAxDIUCAAAECBKYTkMBc4tR8TPv58+eDIyI+hnm6KdLtUc3zdz7\/\/PPBU5Gb1+bm5rnfHt5tr4vXWpvv\/lo8pdmuePTrSHyKcTa7SUeP\/q31N2GS1uTfN54\/\/\/nP\/+lrdUY\/uTvNV+lM7qX\/IyQwF8RgdAP461\/\/OvMXQfYf2vJGMFxA29vbg4+2T\/r+qvKuoI4RDV2b0c7y5aV1XF0\/o2z+HnzxxRfpxYsXgyd3NxtE82rmstfHCTSJ4ffffz\/4mpfmcRcbGxvpou+0+7ieFuPsYTL49ddf\/1MCMzpno8xfCcwFc3o0wMNnyAyfKbMYy2A+VxllIc1Ha7pemg3hj3\/8Y\/r73\/8ugZmObOJR5\/2LduJJDphKYPxvgL8JU7F9cNDwHy4\/+clPBr\/75S9\/+T6BGf\/HY5Qn0UtgzpkrFz2598aNG+d+03W76easRsAfq27nQfOH6eXLl+kXv\/hF+t3vfieB6YB3\/I9\/B01qYkTgvArMsEoLanqBZp7+7W9\/S8vLy4OHuI7uV+Pf\/TftdwFO33s\/R0pgLklgRisu\/gXW\/QQd3g\/z29\/+NtzXvHevNV2LzTy9efPm4ODmf3sLaTq3y45qNob79++nX\/3qV+nx48eD+7fcA\/PxrqMtNG\/R3b17d7D5Dt+m67aHxWlt\/B\/gzZWPV1zQlbueAAAEEElEQVSGc\/rRo0eXfplx6WoSGAlML3N0+K\/a5l4Y9xF0E4JmE\/jTn\/408HQTbzemTSvDufrTn\/50cJ9G82r+hdtstubuxzuPfqfd0Fa1u72rBKa9XYgzvYWUN4ySl+59mzn7m9\/8Jv36178e\/ItKAtOd8XlvIfHtxpdtN46jrVyUwGxtbaX9\/f3B3wdvIXXvXlSLo28ZuYm3u9D45FF3lqMtjX88ffg7JfmP9z5v\/TcJzO9\/\/\/tBRab54livdgISmHZul511XgIz\/paRm3i7dy+qRR+j7j4cw4Wl9N697XiLKgTdGo\/eaOptjm5tz3sLyd+I9sbnJTBNaz5G3d60yjM9yK7bsF1UJXBDZLfOTWsSmO5NRx9k52Fr3fkON9yjo6NBo2w\/zvaiBMaD7D7O1dkECBAgQIAAgU4EfAqpE0aNECBAgAABAvMUkMDMU1tfBAgQIECAQCcCEphOGDVCgAABAgQIzFNAAjNPbX0RIECAAAECnQhIYDph1AgBAgQIECAwTwEJzDy19UWgMoHhd9RcNOzmeR23bt1KP\/7449we6jZ8vME0D+mb5djKQmO4BBZeQAKz8FMAAIHpBC56vsR0Z3d31KzfYB7lsendCWqJQAwBCUyMOLoKAtkFJDDZiXVAgMAMAhKYGbAcSmCRBS5KYEYfs98cs7GxkT799NN0cHCQTk9PB9\/a\/OLFi\/SXv\/wlPXz4cEA4\/vTl0adeT3praLwCM\/4k1\/HzVWAWeda69sgCEpjI0XVtBDoUmCWBabptEpilpaXBd7A8f\/48ff3114P7ZUa\/0LNJdHZ2dgZJzvb29mC0zX03X3zxxSDpab45d\/w1nsCM\/\/doQtV80aIEpsNJoCkCBQlIYAoKhqEQKFlglgTm9u3bg2RlmJA0ScYwoRlt55NPPkmPHz9OT58+HSQ7w9dl97mM\/m6aLwiVwJQ8q4yNQHsBCUx7O2cSWCiBWRKYppqytrY2MYH52c9+lu7evXuu40Vf6jee3Ix+Uuq8t58kMAs1TV3sAglIYBYo2C6VwMcI5EhgmvF8880376sz04zvourM6L0wo4mMBGYaVccQqE9AAlNfzIyYQC8CORKYpgJz2f0u513opI9Rj49TAtPLdNEpgewCEpjsxDogEEMgRwIzvIm3Edrd3U3NTbejN\/kO76MZFZx0D8x4wiKBiTH\/XAWBcQEJjDlBgMBUAjkSmCZBGf8YdDOY4SeWpqnADBOeN2\/evD\/88PDw\/T04EpipwusgAtUJSGCqC5kBE1hsgUlvIY3rSGAWe764+rgCEpi4sXVlBEIKSGBChtVFEZhZQAIzM5kTCBDoU2CWL2ic5dg+r0nfBAjMLiCBmd3MGQQIECBAgEDPAhKYngOgewIECBAgQGB2gf8HQ+2RlFukcVEAAAAASUVORK5CYII=","height":0,"width":0}}
-%---
-%[output:1f1cd18b]
-%   data: {"dataType":"image","outputData":{"dataUri":"data:,","height":0,"width":0}}
-%---
-%[output:98aac097]
-%   data: {"dataType":"image","outputData":{"dataUri":"data:,","height":0,"width":0}}
-%---
-%[output:4e67fe7e]
-%   data: {"dataType":"image","outputData":{"dataUri":"data:,","height":0,"width":0}}
-%---
-%[output:97b28bbd]
-%   data: {"dataType":"image","outputData":{"dataUri":"data:,","height":0,"width":0}}
 %---

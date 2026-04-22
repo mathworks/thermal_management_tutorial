@@ -17,12 +17,12 @@ tiledlayout(2,1)
 
 nexttile
 plot(fanVdotM3H_LUT,fanDPPa_LUT')
-xlabel('Volumteric flow rate [m^3/s]')
+xlabel('Volumetric flow rate [m^3/s]')
 ylabel('Static pressure gain [Pa]')
 
 nexttile
 plot(fanVdotM3H_LUT,fanPkW_LUT')
-xlabel('Volumteric flow rate [m^3/s]')
+xlabel('Volumetric flow rate [m^3/s]')
 ylabel('Brake power [kW]')
 
 %% Save data to .mat

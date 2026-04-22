@@ -8,7 +8,7 @@
 %[text] 
 %[text] ![](text:image:47ab)
 %[text] ### 
-%[text] We will start by writing down a set of requirements for the lift and use these to parameterize the components. We will create test harness models for most of these components to ensure we understand the effects of the parameters on their behavior and to decouple interactions between components. This is much like what we would do if we were building the system in the lab. In general, we can use the following flowchart when building and refining our models.
+%[text] We will start by writing down a set of requirements for the cooling system and use these to parameterize the components. We will create test harness models for most of these components to ensure we understand the effects of the parameters on their behavior and to decouple interactions between components. This is much like what we would do if we were building the system in the lab. In general, we can use the following flowchart when building and refining our models.
 %[text] ### ![](text:image:6f7f)
 %[text] ## Requirements for X-ray Tube Cooling
 %[text] We begin, as always, with a set of basic requirements for our system. These requirements cover the performance of the device under a set of prescribed loading conditions.
@@ -105,7 +105,7 @@ simOut = sim(simInp);
 % Extract results
 % Pump
 VDotSim             = simOut.simlog.Pump.Centrifugal_Pump_TL.q_A.series.values("lpm");
-% Devide
+% Device
 TDeviceSim          = simOut.simlog.ColdPlate.Device.M.T.series.values("degC");
 % Cold plate
 TCPInletSim         = simOut.simlog.ColdPlate.Parallel_Channels.A.T.series.values("degC");
@@ -145,7 +145,7 @@ outputTable = table(Measurement, MeasurementValues);
 disp(outputTable)
 %[text] This table shows the steady state values for the system at maximum flow and heat load conditions.
 %%
-%[text] ## Assembling and Testing the Cooling Loop Components - Closed Loop
+%[text] ## Assembling and Testing the Cooling Loop Components - Control Logic
 %[text] In the next step we will add simple control logic to the assembly. The pump will be controlled to ensure the cold plate outlet temperature stays below the maximum allowed value of 30°C. 
 open_system("example_System_Assembly_ClosedLoop_Logic")   
 %[text] ![](text:image:5c54)
@@ -156,7 +156,7 @@ open_system("example_System_Assembly_ClosedLoop_Logic")
 fanSpeedHigh = simscape.Value(2800, "rpm");
 fanSpeedMed  = simscape.Value(2555, "rpm");
 fanSpeedLow  = simscape.Value(1750, "rpm");
-%[text] Note, that the there is a [Unit Delay](https://www.mathworks.com/help/simulink/slref/unitdelay.html) added in both control loops. This eliminates an algebraic loop that would otherwise exist (see also [Algebraic Loop Concepts](https://www.mathworks.com/help/simulink/ug/algebraic-loops.html) and [Remove Algebraic Loops](https://www.mathworks.com/help/simulink/ug/remove-algebraic-loops.html)), this technique can also be used to mimic sensor delay. Additionally this will create a discrete signal sampled at the $\\text{Sample time}$ parameter specified in the block. This is common, for example, if for future automatic code generation the algorithm portion of the models needs to be configured to use a fixed-step size. Alternatively, if this is not required, a filter modeled, for example, with a [Transfer Fcn](https://www.mathworks.com/help/simulink/slref/transferfcn.html) block, can be introduced to resolve the algebraic loop and introduce a continuous state. To improve the simulation performance of the Simscape network, we use a [First Order Hold](https://www.mathworks.com/help/simulink/slref/firstorderhold.html) to generate a continuous signal without triggering a solver reset. See also [**this article**](https://blogs.mathworks.com/simulink/2020/01/17/a-new-first-order-hold/). 
+%[text] Note, that the there is a [Unit Delay](https://www.mathworks.com/help/simulink/slref/unitdelay.html) added in both control loops. This eliminates an algebraic loop that would otherwise exist (see also [Algebraic Loop Concepts](https://www.mathworks.com/help/simulink/ug/algebraic-loops.html) and [Remove Algebraic Loops](https://www.mathworks.com/help/simulink/ug/remove-algebraic-loops.html)), this technique can also be used to mimic sensor delay. Additionally this will create a discrete signal sampled at the $\\text{Sample time}$ parameter specified in the block. This is common, for example, if for future automatic code generation the algorithm portion of the models needs to be configured to use a fixed-step size. Alternatively, if this is not required, a filter modeled, for example, with a [Transfer Fcn](https://www.mathworks.com/help/simulink/slref/transferfcn.html) block, can be introduced to resolve the algebraic loop and introduce a continuous state. To improve the simulation performance of the Simscape network, we use a [First Order Hold](https://www.mathworks.com/help/simulink/slref/firstorderhold.html) to generate a continuous signal without triggering a solver reset. See also [this article](https://blogs.mathworks.com/simulink/2020/01/17/a-new-first-order-hold/). 
 %[text] To test the setup we will load scenario of a usage profile throughout a 10-hour operation. The profiles assumes operation at different levels with idle time and a lunch break:
 load("Data\usageProfile.mat")
 figure
@@ -172,7 +172,7 @@ simOut = sim(simInp);
 % Extract results
 % Pump
 VDotSim             = simOut.simlog.Pump.Centrifugal_Pump_TL.q_A.series.values("lpm");
-% Devide
+% Device
 TDeviceSim          = simOut.simlog.ColdPlate.Device.M.T.series.values("degC");
 % Cold plate
 TCPInletSim         = simOut.simlog.ColdPlate.Parallel_Channels.A.T.series.values("degC");

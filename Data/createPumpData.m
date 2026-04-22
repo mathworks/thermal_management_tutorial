@@ -12,12 +12,12 @@ figure
 
 yyaxis left
 plot(pumpVdotLPM_LUT,pumpHeadm_LUT)
-xlabel('Volumteric flow rate [lpm]')
+xlabel('Volumetric flow rate [lpm]')
 ylabel('Pump head [m]')
 
 yyaxis right
 plot(pumpVdotLPM_LUT,pumpPW_LUT)
-xlabel('Volumteric flow rate [lpm]')
+xlabel('Volumetric flow rate [lpm]')
 ylabel('Pump break power [W]')
 
 %% Save data to .mat
