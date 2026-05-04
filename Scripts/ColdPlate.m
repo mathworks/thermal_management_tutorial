@@ -1,5 +1,5 @@
 %[text] # Modeling the Cold Plate for the X-ray Device
-%[text] In this section we will create a cold plate from scratch using a mixture of shipping components and custom components. First, we'll perform some static sizing calculations in MATLAB to get an idea of what the parameters and constraints should be. Next we'll do a trade study for two proposed architectures and choose the best for our needs. Along the way, we'll present some things to consider while working with [Thermal Liquid (TL)](https://www.mathworks.com/help/releases/R2026a/simscape/ug/thermal-liquid-modeling-workflow.html) systems.
+%[text] In this section we will create a cold plate from scratch using a mixture of shipping components and custom components. First, we'll perform some static sizing calculations in MATLAB to get an idea of what the parameters and constraints should be. Next, we'll do a trade study for two proposed architectures and choose the best for our needs. Along the way, we'll present some things to consider while working with [Thermal Liquid (TL)](https://www.mathworks.com/help/releases/R2026a/simscape/ug/thermal-liquid-modeling-workflow.html) systems.
 %[text] ## Cold Plate Requirements and Operating Conditions
 %[text] We need our cold plate to remove a maximum heat load of 2000 W. Per our requirements, we will use water as our working fluid. To maintain optimal operation, we must ensure that the coolant enters the cold plate at a temperature no higher than 25°C, and that its outlet temperature stays below 30°C. Our coolant loop operates at a pressure of 2 bar, and we must make sure the temperature of the device never exceeds 50°C during use.
 initializeParameters("ColdPlate")                           % Loads default values as backup
@@ -17,19 +17,21 @@ muCoolant       = simscape.Value(8.89995e-4, "Pa*s");       % Coolant dynamic vi
 kCoolant        = simscape.Value(0.607, "W/(m*K)");         % Coolant thermal conductivity 
 PrCoolant       = simscape.Value(6.134, "1");               % Coolant Prandtl number
 %[text] #### Thermal Mass Properties of Device
-%[text] The X-Ray Tube assembly will be assumed as one lumped thermal mass
+%[text] The X-Ray Tube assembly will be assumed as one lumped thermal mass.
 massDevice      = simscape.Value(80, "kg");                 % Device lumped mass
 cpDevice        = simscape.Value(1.3, "kJ/(kg*K)");         % Device heat capacity
 %%
 %[text] #### Required Flow Rate
 %[text] Assuming the fluid properties are approximately constant, the required steady-state flow rate to keep the outlet temperature at a maximum of 30°C with the assumed inlet temperature is determined using:
-%[text] $Q\_{\\textrm{Diss}} =\\left(T\_{\\textrm{cp},\\textrm{out}} -T\_{\\textrm{cp},\\textrm{in}} \\right)\*{\\dot{m} }\_{\\textrm{water}} \*c\_{p,\\textrm{water}}${"editStyle":"visual"}
+%[text] $Q\_{\\textrm{Diss}} =\\left(T\_{\\textrm{cp},\\textrm{out}} -T\_{\\textrm{cp},\\textrm{in}} \\right)\*{\\dot{m} }\_{\\textrm{water}} \\cdot c\_{p,\\textrm{water}}${"editStyle":"visual"}
 mDot = QDiss/(cpCoolant*deltaTCoolant); % Coolant mass flow rate
 VDot = mDot/rhoCoolant;                 % Coolant volumetric flow rate
 %[text] For our modeling, we will use the volumetric flow rate in the following test cases, since this is often used in engineering practice. To test this in a simulation, we can start with a simple model:
 open_system("example_TCoolantOut")
 %[text] ![](text:image:213c)
-%[text] The cold plate can be represented using a [Pipe (TL)](https://www.mathworks.com/help/simscape/ref/pipetl.html) block. We'll use two [Reservoir (TL)](https://www.mathworks.com/help/simscape/ref/reservoirtl.html) blocks to provide the inlet and outlet boundary conditions. The **Pipe (TL)** inlet temperature at **Port A** equals the upstream temperature. In this setup we expect to draw fluid from the *Inlet Boundary Condition*, so we set the temperature accordingly in that block. Since our focus is on the steady-state heat transfer for the pipe, and not on pressure losses, we keep the pipe geometry parameters—pipe length, cross-sectional area, and hydraulic diameter—at their default values. For fluid temperature within the pipe, these parameters only influence dynamic outcomes, such as how quickly the steady-state temperature is achieved. Later, we will adapt these parameters to suit our use case and reflect a more realistic geometry. The flow rate is controlled using a [Flow Rate Source (TL)](https://www.mathworks.com/help/simscape/ref/flowratesourcetl.html), starting with stationary fluid and gradually ramping up to the desired flow rate. The `Power added` parameter in the **Flow Rate Source (TL)** is set to `None` (setting it to `Isentropic` would add heat, mimicking the work being done on the fluid by a pump). For now, we are only investigating heat added by the X-ray device through **Port H** of the pipe. Additionally, there is a [Thermal Liquid Properties (TL)](https://www.mathworks.com/help/releases/R2025b/hydro/ref/thermalliquidpropertiestl.html) block connected to the Simscape network. This block defines Water as the working fluid and will propagate the fluid properties to all the blocks in the network. The component contains pre-defined fluid properties. If we had our own measured data for the fluid properties, we could use the [Thermal Liquid Settings (TL)](https://www.mathworks.com/help/simscape/ref/thermalliquidsettingstl.html) block to define them. 
+%%
+%[text] The cold plate can be represented using a [Pipe (TL)](https://www.mathworks.com/help/simscape/ref/pipetl.html) block. We'll use two [Reservoir (TL)](https://www.mathworks.com/help/simscape/ref/reservoirtl.html) blocks to provide the inlet and outlet boundary conditions. The **Pipe (TL)** inlet temperature at **Port A** equals the upstream temperature. In this setup we expect to draw fluid from the *Inlet Boundary Condition*, so we set the temperature accordingly in that block. Since our focus is on the steady-state heat transfer for the pipe, and not on pressure losses, we keep the pipe geometry parameters—pipe length, cross-sectional area, and hydraulic diameter—at their default values. For fluid temperature within the pipe, these parameters only influence dynamic outcomes, such as how quickly the steady-state temperature is achieved. Later, we will adapt these parameters to suit our use case and reflect a more realistic geometry. 
+%[text] The flow rate is controlled using a [Flow Rate Source (TL)](https://www.mathworks.com/help/simscape/ref/flowratesourcetl.html), starting with stationary fluid and gradually ramping up to the desired flow rate. The `Power added` parameter in the **Flow Rate Source (TL)** is set to `None` (setting it to `Isentropic` would add heat, mimicking the work being done on the fluid by a pump). For now, we are only investigating heat added by the X-ray device through **Port H** of the pipe. Additionally, there is a [Thermal Liquid Properties (TL)](https://www.mathworks.com/help/releases/R2025b/hydro/ref/thermalliquidpropertiestl.html) block connected to the Simscape network. This block defines Water as the working fluid and will propagate the fluid properties to all the blocks in the network. The component contains pre-defined fluid properties. If we had our own measured data for the fluid properties, we could use the [Thermal Liquid Settings (TL)](https://www.mathworks.com/help/simscape/ref/thermalliquidsettingstl.html) block to define them. 
 %[text] 
 %[text] Next. we run the simulation long enough to reach steady state.
 simInp = Simulink.SimulationInput("example_TCoolantOut");
@@ -84,6 +86,7 @@ cpK                 = simscape.Value(167, "W/(m*K)");
 open_system(projRoot + "\Libraries\supplemental_lib.slx")
 %[text] See this schematic of how to use this approach and how it compares with modeling the individual parallel flow paths. If you want to investigate this model, open [example\_FlowSplitter.slx](file:..\Models\example_FlowSplitter.slx). 
 %[text] ![](text:image:9f87)
+%%
 %[text] The flow splitter acts as a multiplier or divider, to make sure in the thermal liquid domain, the flow is divided at the pipe input/and multiplied at output. Similarly, the splitter in the thermal domain, will multiply or divide the heat flow rate. Using this approach will result in a smaller and more performant model and is valid under the assumptions we made above. 
 %[text] Additionally, we will calculate derived parameters, this includes the device surface area, the number of parallel channels, as well as an equivalent length parameter. The latter is used to account for additional pressure drops from the cold plate. The **Pipe (TL)** block uses a Haaland approximation to calculate the Darcy friction factor for turbulent flow. For laminar flow, it uses a constant shape factor. The parameter `Aggregate equivalent length of local resistances` can be used to account for additional friction, for example due to bends, welds, and fittings. Here, we use the parameter to account for the additional bends at channel inlet and outlet. 
 %[text] Note that the **Reservoir (TL)** blocks have the `Cross-sectional area at port A` parameter set to be of the same value as in the connected **Pipe (TL)** block. It is recommended to specify consistent (same or a similar) values for cross-sectional area of connected ports, this improves stability and avoids non-physical discontinuities.  
@@ -98,6 +101,7 @@ equivalentLength      = numBend*60*channelDh;                                   
 %[text] 
 open_system("example_ColdPlate")
 %[text] ![](text:image:0033)
+%%
 %[text] With the given values we simulate the model and extract the coolant outlet and device temperature. 
 simInp = Simulink.SimulationInput("example_ColdPlate");
 simInp = simInp.setModelParameter("StopTime","5400");
@@ -136,7 +140,6 @@ disp(dpColdPlate(end)) %[output:543a8cf5]
 %[text] At steady state for the maximum flow rate, the current cold plate design produces a pressure drop of roughly 0.013 bar. 
 %%
 %[text] ## Next Steps
-%[text] - Investigate parameter sweep: [Cold Plate Parameterization](file:.\ColdPlateParameterization.m)
 %[text] - Move to next step: [Pump](file:.\Pump.m)
 %[text] - Go back to main script: [Design Cooling System](file:.\DesignCoolingSystem.m) \
 

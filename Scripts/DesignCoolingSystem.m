@@ -3,11 +3,8 @@
 %[text] - [MATLAB Onramp](https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted)
 %[text] - [Simulink Onramp](https://matlabacademy.mathworks.com/details/simulink-onramp/simulink)
 %[text] - [Simscape Onramp](https://matlabacademy.mathworks.com/details/simscape-onramp/simscape) \
-%[text] The example we will work through is a cooling system for an X-ray tube assembly. Generally, this assembly could be thought of as a generic electronic heat load that needs to be thermally regulated, e.g., motors, batteries, engines, etc., but we use the X-ray system for the sake of concreteness and simplicity. A schematic of the system construct is shown in the figure below. It consists of a cold plate for the device cooling, a liquid-air heat exchanger (radiator + fan), an accumulator, and a pump. 
-%[text] 
-%[text] 
+%[text] The example we will work through is a cooling system for an X-ray tube assembly. Generally, this assembly could be thought of as a generic electronic heat load that needs to be thermally regulated, (e.g., motors, batteries, engines, etc.), but we use the X-ray system for the sake of concreteness and simplicity. A schematic of the system we'll model and investigate is shown in the figure below. It consists of a cold plate for the device cooling, a liquid-air heat exchanger (radiator + fan), an accumulator, and a pump. 
 %[text] ![](text:image:47ab)
-%[text] ### 
 %[text] We will start by writing down a set of requirements for the cooling system and use these to parameterize the components. We will create test harness models for most of these components to ensure we understand the effects of the parameters on their behavior and to decouple interactions between components. This is much like what we would do if we were building the system in the lab. In general, we can use the following flowchart when building and refining our models.
 %[text] ### ![](text:image:6f7f)
 %[text] ## Requirements for X-ray Tube Cooling
@@ -16,8 +13,8 @@
 %[text] 2. Maintain nominal X-ray tube temperature between 20°C and 50°C
 %[text] 3. Maximum cold plate entrance temperature set point: 25°C
 %[text] 4. Allowed coolant temperature rise: 5°C
-%[text] 5. Working fluid: Water
-%[text] 6. Working fluid pressurized at 2 bar
+%[text] 5. Working coolant fluid: Water
+%[text] 6. Working coolant fluid pressurized at 2 bar
 %[text] 7. Operating conditions: Inside at room temperature at 20°C \
 %[text] We will test these requirements against a typical load at the end of this document.
 %%
@@ -93,10 +90,10 @@ disp(outputTable)
 %[text] Now that we’re satisfied with the open-loop model response, we can close the fluid loop by removing the Inlet and Outlet Boundary Condition blocks and connecting the B port of the Piping subsystem to the A port of the Pump subsystem. This closed-loop model will allow us to start designing our controls for the system. Having the loop closed is a substantial change from open boundary conditions because the total amount of fluid in the system becomes finite. When we close the loop, we need to add a tank or accumulator to ensure there is enough capacity in the system to absorb pressure and temperature fluctuations from the dynamics of the system.
 open_system("example_System_Assembly_ClosedLoop")   
 %[text] ![](text:image:5d28)
-%[text] In this version, the piping subsystem includes the accumulator component which we  parameterized in the final section of [Pump.m](file:.\Pump.m).
+%[text] In this version, the piping subsystem includes the accumulator component which we parameterized in the final section of [Pump.m](file:.\Pump.m).
 open_system("example_System_Assembly_ClosedLoop/PipingAccumulator")   
 %[text] ![](text:image:7366)
-%[text] Now we simulate the closed loop model for two hours and plot the temperatures and pressures. Here we apply step changes to the Pump and Fan and the maximum (2 kW)  heat load to the cold plate.
+%[text] Now we simulate the closed loop model for two hours and plot the temperatures and pressures. Here we apply step changes to the Pump and Fan and the maximum (2 kW) heat load to the cold plate.
 simInp = Simulink.SimulationInput("example_System_Assembly_ClosedLoop");
 simInp = simInp.setModelParameter("StopTime","7200");
 
@@ -149,8 +146,6 @@ disp(outputTable)
 %[text] In the next step we will add simple control logic to the assembly. The pump will be controlled to ensure the cold plate outlet temperature stays below the maximum allowed value of 30°C. 
 open_system("example_System_Assembly_ClosedLoop_Logic")   
 %[text] ![](text:image:5c54)
-%[text] 
-%[text] 
 %[text] The actual outlet temperature is measured after the cold plate subsystem. The close-loop system has a simple controller logic, which turns on the pump at 30°C and runs at 25% reference speed once the temperature hits 25°C. 
 %[text] The fan will be controlled by a multistage controller with a high/medium/low speed setting for the fan, depending on the temperature measurement at the radiator outlet.
 fanSpeedHigh = simscape.Value(2800, "rpm");

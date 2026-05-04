@@ -1,7 +1,7 @@
 %[text] # Pump Sizing
 %[text] In this section, we will determine the size requirement for the system pump based on all of the expected resistances of the flow paths through it. We begin by characterizing the losses due to friction in the elements. We then select an appropriately sized pump and use its datasheet to parameterize it in our model.
 %[text] ## Additional Piping, Fittings and Radiator
-%[text] In the previous section [Cold Plate](file:.\ColdPlate.m) we determined expected pressure losses at nominal conditions for the cold plate. Adding to that, there will be additional pressure losses from piping, fittings, and the radiator. We will determine the length of piping and the aggregated equivalent length of additional fittings. We are assuming an overall piping length of 3 m, and we will roughly account for the equivalent length of four 90° elbow bends. 
+%[text] In the previous section, [Cold Plate](file:.\ColdPlate.m), we determined expected pressure losses at nominal conditions for the cold plate. Adding to that, there will be additional pressure losses from piping, fittings, and the radiator. We will determine the length of piping and the aggregated equivalent length of additional fittings. We are assuming an overall piping length of 3 m, and we will roughly account for the equivalent length of four 90° elbow bends. 
 %[text] Only a small pressure drop is expected for the radiator, we will add a margin to the overall pressure drop to account for this. 
 %[text:table]{"ignoreHeader":true}
 %[text] | Piping length (m) | 3 |
@@ -24,6 +24,7 @@ pipingRoughness = simscape.Value(15e-6, "m"); % Piping roughness
 %[text] Determine pressure loss in the Simscape model
 open_system("example_Piping")
 %[text] ![](text:image:7e6b)
+%%
 %[text] Again, we are using a **Pipe (TL)** block to represent the additional piping and fitting elements. The pipe geometry is parameterized using the above values. As in previous models, we set the cross-sectional areas of connected ports to similar values. Here, this is chosen to be the piping cross-sectional area. 
 simInp = Simulink.SimulationInput("example_Piping");
 simInp = simInp.setModelParameter("StopTime","250");
@@ -60,6 +61,7 @@ pumpRefSpeed = simscape.Value(2850, "rpm");
 %[text] Next, we will test the pump in a Simscape model:
 open_system("example_Pump")
 %[text] ![](text:image:2371)
+%%
 %[text] The test model uses a [Pressure Source (TL)](https://www.mathworks.com/help/simscape/ref/pressuresourcetl.html) block to mimic a load, we use an [Inport](https://www.mathworks.com/help/simulink/slref/inport.html) block to load a test vector into the model. To test the pump range, we ramp up the load beyond the expected maximum pressure drop. You can also validate the pump curve with the current parameterization by right-clicking the pump component and selecting *Fluids-\>Plot Pump Characteristics:*
 %[text] ![](text:image:9b1e)
 %[text] Note, that the [Simulink-PS Converter](https://www.mathworks.com/help/simscape/ref/simulinkpsconverter.html) block attached to the pump velocity input is configured to filter the input signal (indicated by the black dot on the block icon), this is required to solve this model. This stems from how Simscape is solved and that when converting a Simulink signal to a PS signal, the relevant state is reduced and missing information. To resolve this, in the *Input Handling* section in the block the $\\text{Filtering and derivatives}$ parameter is set to $\\text{Filter input, derivatives calculated}$ (alternatively, signal derivatives could be provided as additional information). Here, $\\text{First-order filtering}$is chosen with a small $\\text{Input filtering time constant}$ so that the filtered input is close to the actual input signal. (Read more in the [Input Handling](https://www.mathworks.com/help/simscape/ref/simulinkpsconverter.html#mw_15965d02-3ff1-479a-84af-76f3d171f8ca) section in the documentation of the block). 
@@ -132,7 +134,7 @@ accumulatorGasK         = simscape.Value(1.4, "1");
 accumulatorInitVolumeL  = accumulatorTotalVolume/2;
 accumulatorInitVolumeG  = accumulatorTotalVolume-accumulatorInitVolumeL;
 accumulatorPreChargeP   = pLoop*accumulatorInitVolumeG^accumulatorGasK/(accumulatorTotalVolume^accumulatorGasK)-simscape.Value(1, "atm");
-%[text] Additionally, the component models hard-stops when reaching minimum or maximum capacity. Hard stop stiffness and damping parameters are used to model this effect. Depending on the values chosen, the volume can momentarily be above capacity or below zero. If this occurs, the model applies the restoring hard-stop contact pressure, and spikes in liquid pressure can occur. Along with the accumulator component, we will connect a [Flow Resistance (TL)](https://www.mathworks.com/help/simscape/ref/flowresistancetl.html) block to the circuit. The accumulator itself models no flow resistance between its internal volume and its node, adding a small flow resistance allows the model to separate the accumulator's node state from the connected components. 
+%[text] Additionally, the component models hard-stops when reaching minimum or maximum capacity. Hard stop stiffness and damping parameters are used to model this effect. Depending on the values chosen, the volume can momentarily be above capacity or below zero. If this occurs, the model applies the restoring hard-stop contact pressure, and spikes in liquid pressure can occur. Along with the accumulator component, we will connect a [Flow Resistance (TL)](https://www.mathworks.com/help/simscape/ref/flowresistancetl.html) block to the circuit. The accumulator itself models no flow resistance between its internal volume and its node, and adding a small flow resistance allows the model to separate the accumulator's node state from the connected components. 
 accumulatorStopK      = simscape.Value(1e4, "MPa/m^3");
 accumulatorStopD      = simscape.Value(1e4, "MPa*s/m^6");
 
@@ -141,6 +143,7 @@ flowResistandMdotNom  = simscape.Value(0.1, "kg/s");
 %[text] We will test the parameterization with a model:
 open_system("example_AccumulatorPressure")
 %[text] ![](text:image:6315)
+%%
 %[text] We will test the behaviour over a range of operating conditions. The first test will use use pressure pulses causing in and outflow of the accumulator.:
 %% Parameters for square waveform
 A      = 2;                 % Pulse amplitude (bar)
@@ -187,6 +190,7 @@ hold off
 %[text] Next, we will test how it behaves at thermal expansion by applying a heat source to the accumulator. 
 open_system("example_AccumulatorHeatFlow")
 %[text] ![](text:image:6dc8)
+%%
 %[text] We will apply a constant heat flow rate to cause thermal expansion in the accumulator:
 tInAccumulatorTest        = [0;150];
 heatFlowInAccumulatorTest = [500;500];   % W 
