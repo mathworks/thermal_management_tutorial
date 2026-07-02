@@ -1,9 +1,9 @@
 %% Load pump data extracted with Graph Data Extractor
-load(projRoot + "\Data\DataSheetPump_Head.mat")
+load(projRoot + filesep + "Data" + filesep + "DataSheetPump_Head.mat")
 pumpVdotLPM_LUT = tableData(:,1);
 pumpHeadm_LUT = tableData(:,2);
 
-load(projRoot + "\Data\DataSheetPump_Pwr.mat")
+load(projRoot + filesep +  "Data" + filesep + "DataSheetPump_Pwr.mat")
 pumpPW_LUT = interp1(tableData(:,1),tableData(:,2:end),pumpVdotLPM_LUT,"linear", "extrap");
 
 
@@ -22,4 +22,4 @@ ylabel('Pump break power [W]')
 
 %% Save data to .mat
 
-save(projRoot + "\Data\pumpData.mat", "pumpVdotLPM_LUT", "pumpHeadm_LUT", "pumpPW_LUT");
+save(projRoot + filesep + "Data" + filesep + "pumpData.mat", "pumpVdotLPM_LUT", "pumpHeadm_LUT", "pumpPW_LUT");
