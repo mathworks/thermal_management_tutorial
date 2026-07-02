@@ -5,13 +5,13 @@ projRoot = proj.RootFolder;
 
 switch paramFileName
     case "ColdPlate"        
-        paramStruct = load(projRoot + "\Data\coldPlateParams.mat");
+        paramStruct = load(projRoot + filesep +"Data" + filesep + "coldPlateParams.mat");
     case "Pump"
-        paramStruct = load(projRoot + "\Data\pumpParams.mat");
+        paramStruct = load(projRoot + filesep +"Data" + filesep + "pumpParams.mat");
     case "Radiator"
-        paramStruct = load(projRoot + "\Data\radiatorParams.mat");
+        paramStruct = load(projRoot + filesep +"Data" + filesep + "radiatorParams.mat");
     case "CoolingSystem"
-        paramStruct = load(projRoot + "\Data\coolingSystemParams.mat");
+        paramStruct = load(projRoot + filesep +"Data" + filesep + "coolingSystemParams.mat");
 end
 
 % Assign each field into base workspace
