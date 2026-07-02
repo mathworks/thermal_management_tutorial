@@ -1,14 +1,14 @@
 %[text] # Liquid Cooling System Design with Simscape Fluids™
-%[text] In this tutorial, we will demonstrate how to construct, parameterize and analyze a liquid cooling system with the Simscape Thermal Liquid (TL) and Moist Air (MA) domains. We will provide best practices for working with models and ensuring they meet some given engineering requirements. If you are new to MATLAB, Simulink or Simscape, we recommend walking through the Onramp tutorials first:
+%[text] In this tutorial, we will demonstrate how to construct, parameterize and analyze a liquid cooling system with the Simscape Thermal Liquid (TL) and Moist Air (MA) domains. We will provide best practices for working with models and ensuring they meet given engineering requirements. If you are new to MATLAB, Simulink or Simscape, we recommend walking through the Onramp tutorials first:
 %[text] - [MATLAB Onramp](https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted)
 %[text] - [Simulink Onramp](https://matlabacademy.mathworks.com/details/simulink-onramp/simulink)
 %[text] - [Simscape Onramp](https://matlabacademy.mathworks.com/details/simscape-onramp/simscape) \
-%[text] The example we will work through is a cooling system for an X-ray tube assembly. Generally, this assembly could be thought of as a generic electronic heat load that needs to be thermally regulated, (e.g., motors, batteries, engines, etc.), but we use the X-ray system for the sake of concreteness and simplicity. A schematic of the system we'll model and investigate is shown in the figure below. It consists of a cold plate for the device cooling, a liquid-air heat exchanger (radiator + fan), an accumulator, and a pump. 
+%[text] The example we will work through is a cooling system for an X-ray tube assembly. Generally, this assembly could be thought of as a generic electronic heat load that needs to be thermally regulated, (e.g., motors, batteries, engines, etc.), but we use the X-ray system for the sake of concreteness and simplicity. A schematic of the system we will model and investigate is shown in the figure below. It consists of a cold plate for the device cooling, a liquid-air heat exchanger (radiator + fan), an accumulator, and a pump. 
 %[text] ![](text:image:47ab)
 %[text] We will start by writing down a set of requirements for the cooling system and use these to parameterize the components. We will create test harness models for most of these components to ensure we understand the effects of the parameters on their behavior and to decouple interactions between components. This is much like what we would do if we were building the system in the lab. In general, we can use the following flowchart when building and refining our models.
 %[text] ### ![](text:image:6f7f)
 %[text] ## Requirements for X-ray Tube Cooling
-%[text] We begin, as always, with a set of basic requirements for our system. These requirements cover the performance of the device under a set of prescribed loading conditions.
+%[text] We begin with a set of basic requirements for our system. These requirements cover the performance of the device under a set of prescribed loading conditions.
 %[text] 1. Remove up to 2 kW of waste heat from the cold plate
 %[text] 2. Maintain nominal X-ray tube temperature between 20°C and 50°C
 %[text] 3. Maximum cold plate entrance temperature set point: 25°C
@@ -26,13 +26,13 @@
 %[text] Working through each of the above will produce well parameterized components that we can assemble into a complete model.
 %%
 %[text] ## Assembling and Testing the Cooling Loop Components - Open Loop
-%[text] Now that we have the individual components, we can start the assembly of the overall system by connecting them in an open loop fashion. For better reuse, they have been put into [Subsystem References](https://www.mathworks.com/help/simulink/ug/create-and-use-referenced-subsystems-in-models-using-subsystem-reference.html):
+%[text] Now that we have the individual components, we can start the assembly of the overall system by connecting them in an open-loop fashion. For better reuse, they have been put into [Subsystem References](https://www.mathworks.com/help/simulink/ug/create-and-use-referenced-subsystems-in-models-using-subsystem-reference.html):
 open_system("ColdPlateSubsystem")
 open_system("RadiatorSubsystem")
 open_system("PipingSubsystem")
 open_system("PumpSubsystem")
 open_system("example_System_Assembly")
-%[text] Note that the pump model is configured to use rotational velocity as an input. This will allow us to connect it to a test input and a control output. Also, the pump inertia's **Rotational velocity** initial value is set to a **Priority** of **None**\*,\* since this will be directly connected to a velocity input. Similarly, the heat input to the device mass and cold plate is configured to receive an external input from a Simulink signal, so we can later define different operating scenarios. 
+%[text] Note that the pump model is configured to use rotational velocity as an input. This will allow us to connect it to a test input and a control output. Also, the pump inertia's **Rotational velocity** initial value is set to a `Priority` of `None`, since this will be directly connected to a velocity input. Similarly, the heat input to the device mass and cold plate is configured to receive an external input from a Simulink signal, so we can later define different operating scenarios. 
 %[text] Next, we connect all the Subsystem References from above into a single model with open boundary conditions. In this model, the Inlet Boundary Conditions are set to 2 bar and 25 °C. We actuate the pump to a speed that produces the desired flow rate at the maximum design heat load. We use a step function so the system can start in a relaxed state. All the parameters we have created for the subsystems during component sizing are loaded from [coolingSystemParams.mat.](file:..\Data\coolingSystemParams.mat) 
 initializeParameters("CoolingSystem")                    
 %[text] ![](text:image:2aaa)

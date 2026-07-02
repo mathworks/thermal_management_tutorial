@@ -47,7 +47,7 @@ disp(dpPiping(end)) %[output:2fd2e159]
 %%
 %[text] ## Pump Parameterization
 %[text] The overall pressure drop determined for the cold plate (in [Cold Plate](file:.\ColdPlate.m)) and the additional piping is roughly 0.35 bars. Adding a margin to account for uncertainties as well as the pressure losses caused by the radiator, we will work with a overall pressure loss value of 0.4 bars. The system will be modeled using a [Centrifugal Pump (TL)](https://www.mathworks.com/help/hydro/ref/centrifugalpumptl.html) which offers several different parameterization options. 
-%[text] We will work with a representative vendor data sheet and extract the pump curves for use in the Simscape block. The $\\text{Pump parameterization} $is set to $\\text{1D tabulated data - head and break power vs. capacity at reference speed}$. With this setting, the pump head and brake power and respective capacity will be provided as a lookup table. The data sheet used is:
+%[text] We will work with a representative vendor data sheet and extract the pump curves for use in the Simscape block. The `Pump parameterization` is set to `1D tabulated data - head and break power vs. capacity at reference speed`. With this setting, the pump head and brake power and respective capacity will be provided as a lookup table. The data sheet used is:
 %[text] ![](text:image:9388)
 %[text] 
 %[text] We can use the [Graph Data Extractor](https://www.mathworks.com/help/simscape/ref/graphdataextractor.html) to extract the points for the relevant pump model:
@@ -64,7 +64,7 @@ open_system("example_Pump")
 %%
 %[text] The test model uses a [Pressure Source (TL)](https://www.mathworks.com/help/simscape/ref/pressuresourcetl.html) block to mimic a load, we use an [Inport](https://www.mathworks.com/help/simulink/slref/inport.html) block to load a test vector into the model. To test the pump range, we ramp up the load beyond the expected maximum pressure drop. You can also validate the pump curve with the current parameterization by right-clicking the pump component and selecting *Fluids-\>Plot Pump Characteristics:*
 %[text] ![](text:image:9b1e)
-%[text] Note, that the [Simulink-PS Converter](https://www.mathworks.com/help/simscape/ref/simulinkpsconverter.html) block attached to the pump velocity input is configured to filter the input signal (indicated by the black dot on the block icon), this is required to solve this model. This stems from how Simscape is solved and that when converting a Simulink signal to a PS signal, the relevant state is reduced and missing information. To resolve this, in the *Input Handling* section in the block the $\\text{Filtering and derivatives}$ parameter is set to $\\text{Filter input, derivatives calculated}$ (alternatively, signal derivatives could be provided as additional information). Here, $\\text{First-order filtering}$is chosen with a small $\\text{Input filtering time constant}$ so that the filtered input is close to the actual input signal. (Read more in the [Input Handling](https://www.mathworks.com/help/simscape/ref/simulinkpsconverter.html#mw_15965d02-3ff1-479a-84af-76f3d171f8ca) section in the documentation of the block). 
+%[text] Note, that the [Simulink-PS Converter](https://www.mathworks.com/help/simscape/ref/simulinkpsconverter.html) block attached to the pump velocity input is configured to filter the input signal (indicated by the black dot on the block icon), this is required to solve this model. This stems from how Simscape is solved and that when converting a Simulink signal to a PS signal, the relevant state is reduced and missing information. To resolve this, in the *Input Handling* section in the block the `Filtering and derivatives` parameter is set to `Filter input, derivatives calculated` (alternatively, signal derivatives could be provided as additional information). Here, `First-order filtering` is chosen with a small `Input filtering time constant` so that the filtered input is close to the actual input signal. (Read more in the [Input Handling](https://www.mathworks.com/help/simscape/ref/simulinkpsconverter.html#mw_15965d02-3ff1-479a-84af-76f3d171f8ca) section in the documentation of the block). 
 filterConst = simscape.Value(0.002, "s");
 dpReq = simscape.Value(0.4, "bar");                                      % Pressure losses used for testing
 
@@ -221,7 +221,7 @@ plot(simOut.tout,volumeAccumulator);
 xlabel("Time [s]")
 ylabel("[l]")
 legend("Volume_{Accumulator,Liquid}")
-%[text] For the given scenario, the fluid heats up to well over 60 °C and the pressure and volume stay well within given ranges. 
+%[text] For the given scenario, the fluid heats up to well over 60°C and the pressure and volume stay well within given ranges. 
 %%
 %[text] ## Next Steps
 %[text] - Move to next step: [Radiator](file:.\Radiator.m)
