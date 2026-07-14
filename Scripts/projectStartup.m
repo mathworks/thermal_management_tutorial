@@ -13,4 +13,4 @@ if((exist('+supplemental')==7) && ~exist('supplemental_lib'))
 end
 cd(projRoot);
 
-edit Scripts\DesignCoolingSystem.m
+edit("Scripts" + filesep + "DesignCoolingSystem.m")

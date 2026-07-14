@@ -20,9 +20,9 @@
 %%
 %[text] ## Sizing and Testing the Cooling Loop Components 
 %[text] We begin by building, parameterizing and testing each of the main components of our model. The steps for each are organized into specific scripts:
-%[text] 1. [Cold Plate](file:.\ColdPlate.m)
-%[text] 2. [Pump](file:.\Pump.m)
-%[text] 3. [Radiator](file:.\Radiator.m) \
+%[text] 1. [Cold Plate](file:ColdPlate.m)
+%[text] 2. [Pump](file:Pump.m)
+%[text] 3. [Radiator](file:Radiator.m) \
 %[text] Working through each of the above will produce well parameterized components that we can assemble into a complete model.
 %%
 %[text] ## Assembling and Testing the Cooling Loop Components - Open Loop
@@ -33,7 +33,7 @@ open_system("PipingSubsystem")
 open_system("PumpSubsystem")
 open_system("example_System_Assembly")
 %[text] Note that the pump model is configured to use rotational velocity as an input. This will allow us to connect it to a test input and a control output. Also, the pump inertia's **Rotational velocity** initial value is set to a `Priority` of `None`, since this will be directly connected to a velocity input. Similarly, the heat input to the device mass and cold plate is configured to receive an external input from a Simulink signal, so we can later define different operating scenarios. 
-%[text] Next, we connect all the Subsystem References from above into a single model with open boundary conditions. In this model, the Inlet Boundary Conditions are set to 2 bar and 25 °C. We actuate the pump to a speed that produces the desired flow rate at the maximum design heat load. We use a step function so the system can start in a relaxed state. All the parameters we have created for the subsystems during component sizing are loaded from [coolingSystemParams.mat.](file:..\Data\coolingSystemParams.mat) 
+%[text] Next, we connect all the Subsystem References from above into a single model with open boundary conditions. In this model, the Inlet Boundary Conditions are set to 2 bar and 25 °C. We actuate the pump to a speed that produces the desired flow rate at the maximum design heat load. We use a step function so the system can start in a relaxed state. All the parameters we have created for the subsystems during component sizing are loaded from the file *coolingSystemParams.mat*. 
 initializeParameters("CoolingSystem")                    
 %[text] ![](text:image:2aaa)
 %%
@@ -153,7 +153,7 @@ fanSpeedMed  = simscape.Value(2555, "rpm");
 fanSpeedLow  = simscape.Value(1750, "rpm");
 %[text] Note, that the there is a [Unit Delay](https://www.mathworks.com/help/simulink/slref/unitdelay.html) added in both control loops. This eliminates an algebraic loop that would otherwise exist (see also [Algebraic Loop Concepts](https://www.mathworks.com/help/simulink/ug/algebraic-loops.html) and [Remove Algebraic Loops](https://www.mathworks.com/help/simulink/ug/remove-algebraic-loops.html)), this technique can also be used to mimic sensor delay. Additionally this will create a discrete signal sampled at the $\\text{Sample time}$ parameter specified in the block. This is common, for example, if for future automatic code generation the algorithm portion of the models needs to be configured to use a fixed-step size. Alternatively, if this is not required, a filter modeled, for example, with a [Transfer Fcn](https://www.mathworks.com/help/simulink/slref/transferfcn.html) block, can be introduced to resolve the algebraic loop and introduce a continuous state. To improve the simulation performance of the Simscape network, we use a [First Order Hold](https://www.mathworks.com/help/simulink/slref/firstorderhold.html) to generate a continuous signal without triggering a solver reset. See also [this article](https://blogs.mathworks.com/simulink/2020/01/17/a-new-first-order-hold/). 
 %[text] To test the setup we will load scenario of a usage profile throughout a 10-hour operation. The profiles assumes operation at different levels with idle time and a lunch break:
-load("Data\usageProfile.mat")
+load("Data" + filesep + "usageProfile.mat")
 figure %[output:6ece52a2]
 plot(dailyProfile.time_s, dailyProfile.heat_W) %[output:6ece52a2]
 xlabel("Time [s]") %[output:6ece52a2]

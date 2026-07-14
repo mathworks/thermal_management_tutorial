@@ -21,6 +21,7 @@ for i=1:numel(flds)
     varValue = paramStruct.(varName);
     assignin('base', varName, varValue);
 end
-  
+
+assignin('base', "projRoot", projRoot);  
 
 end

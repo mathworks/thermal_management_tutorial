@@ -26,7 +26,7 @@ kinViscAir     = simscape.Value(15e-6, "m^2/s");            % Air kinematic visc
 PrAir          = simscape.Value(0.71, "1");                 % Air Prandtl number
 kAir           = simscape.Value(0.026, "W/(m*K)");          % Air thermal conductivity 
 %[text] #### Coolant Flow Rate
-%[text] The flow rate used in the calculations is the nominal flow rate as determined in [ColdPlate](file:.\ColdPlate.m).
+%[text] The flow rate used in the calculations is the nominal flow rate as determined in [ColdPlate](file:ColdPlate.m).
 mDot = QDiss/(cpCoolant*deltaTCoolant); % Coolant mass flow rate
 VDot = mDot/rhoCoolant;                 % Coolant volumetric flow rate
 %%
@@ -66,7 +66,6 @@ tubeK         = simscape.Value(167, "W/(m*K)");
 tubeRho       = simscape.Value(2700, "kg/m^3");
 tubeCp        = simscape.Value(880, "J/(kg*K)");
 %[text] 
-
 HEXTubeWOuter = HEXTubeW+2*HEXTubeD;                                        % Heat exchanger tube outer width
 HEXTubeHOuter = HEXTubeH+2*HEXTubeD;                                        % Heat exchanger tube outer height
 
@@ -152,8 +151,7 @@ disp(dpFan(end)) %[output:3a7570c4]
 %[text] ![](text:image:826e)
 %[text] Again, we can use the [Graph Data Extractor](https://www.mathworks.com/help/simscape/ref/graphdataextractor.html) to extract the lookup tables needed to parameterize the Simscape component:
 %[text] ![](text:image:6e4c)
-%[text] See the script [createFanData](file:..\Data\createFanData.m) to see how the data from the Graph Data Extractor is processed. 
-projRoot = currentProject().RootFolder;
+%[text] See the script [createFanData](file:createFanData.m) to see how the data from the Graph Data Extractor is processed. 
 load(projRoot + filesep + "Data" + filesep + "fanData.mat")
 %[text] 
 %[text] Testing the fan in a Simscape model. 
@@ -204,8 +202,8 @@ xlabel("Fan speed [rpm]") %[output:51552f3c]
 fanSpeed  = simscape.Value(2555, "rpm");
 %%
 %[text] ## Next Steps
-%[text] - Go back to the previous step: [Pump](file:.\Pump.m)
-%[text] - Go to main script: [Design Cooling System](file:.\DesignCoolingSystem.m) \
+%[text] - Go back to the previous step: [Pump](file:Pump.m)
+%[text] - Go to main script: [Design Cooling System](file:DesignCoolingSystem.m) \
 
 %[appendix]{"version":"1.0"}
 %---

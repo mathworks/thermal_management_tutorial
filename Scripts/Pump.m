@@ -1,7 +1,7 @@
 %[text] # Pump Sizing
 %[text] In this section, we will determine the size requirement for the system pump based on all of the expected resistances of the flow paths through it. We begin by characterizing the losses due to friction in the elements. We then select an appropriately sized pump and use its datasheet to parameterize it in our model.
 %[text] ## Additional Piping, Fittings and Radiator
-%[text] In the previous section, [Cold Plate](file:.\ColdPlate.m), we determined expected pressure losses at nominal conditions for the cold plate. Adding to that, there will be additional pressure losses from piping, fittings, and the radiator. We will determine the length of piping and the aggregated equivalent length of additional fittings. We are assuming an overall piping length of 3 m, and we will roughly account for the equivalent length of four 90° elbow bends. 
+%[text] In the previous section, [Cold Plate](file:ColdPlate.m), we determined expected pressure losses at nominal conditions for the cold plate. Adding to that, there will be additional pressure losses from piping, fittings, and the radiator. We will determine the length of piping and the aggregated equivalent length of additional fittings. We are assuming an overall piping length of 3 m, and we will roughly account for the equivalent length of four 90° elbow bends. 
 %[text] Only a small pressure drop is expected for the radiator, we will add a margin to the overall pressure drop to account for this. 
 %[text:table]{"ignoreHeader":true}
 %[text] | Piping length (m) | 3 |
@@ -46,13 +46,13 @@ hold off %[output:5b65268e]
 disp(dpPiping(end)) %[output:2fd2e159]
 %%
 %[text] ## Pump Parameterization
-%[text] The overall pressure drop determined for the cold plate (in [Cold Plate](file:.\ColdPlate.m)) and the additional piping is roughly 0.35 bars. Adding a margin to account for uncertainties as well as the pressure losses caused by the radiator, we will work with a overall pressure loss value of 0.4 bars. The system will be modeled using a [Centrifugal Pump (TL)](https://www.mathworks.com/help/hydro/ref/centrifugalpumptl.html) which offers several different parameterization options. 
+%[text] The overall pressure drop determined for the cold plate (in [Cold Plate](file:ColdPlate.m)) and the additional piping is roughly 0.35 bars. Adding a margin to account for uncertainties as well as the pressure losses caused by the radiator, we will work with a overall pressure loss value of 0.4 bars. The system will be modeled using a [Centrifugal Pump (TL)](https://www.mathworks.com/help/hydro/ref/centrifugalpumptl.html) which offers several different parameterization options. 
 %[text] We will work with a representative vendor data sheet and extract the pump curves for use in the Simscape block. The `Pump parameterization` is set to `1D tabulated data - head and break power vs. capacity at reference speed`. With this setting, the pump head and brake power and respective capacity will be provided as a lookup table. The data sheet used is:
 %[text] ![](text:image:9388)
 %[text] 
 %[text] We can use the [Graph Data Extractor](https://www.mathworks.com/help/simscape/ref/graphdataextractor.html) to extract the points for the relevant pump model:
 %[text] ![](text:image:5612)
-%[text] Load values from the previously created Graph Data Extractor session. See the script [createPumpData](file:..\Data\createPumpData.m) how the data from the Graph Data Extractor is processed. 
+%[text] Load values from the previously created Graph Data Extractor session. See the script [createPumpData](file:createPumpData.m) how the data from the Graph Data Extractor is processed. 
 load(projRoot + filesep + "Data" + filesep + "pumpData.mat")
 %[text] We will use a pump $\\text{Inertia}$ value of 1e-5 kg\*m^2. 
 pumpInertia  = simscape.Value(1e-5, "kg*m^2"); 
@@ -62,7 +62,7 @@ pumpRefSpeed = simscape.Value(2850, "rpm");
 open_system("example_Pump")
 %[text] ![](text:image:2371)
 %%
-%[text] The test model uses a [Pressure Source (TL)](https://www.mathworks.com/help/simscape/ref/pressuresourcetl.html) block to mimic a load, we use an [Inport](https://www.mathworks.com/help/simulink/slref/inport.html) block to load a test vector into the model. To test the pump range, we ramp up the load beyond the expected maximum pressure drop. You can also validate the pump curve with the current parameterization by right-clicking the pump component and selecting *Fluids-\>Plot Pump Characteristics:*
+%[text] The test model uses a [Pressure Source (TL)](https://www.mathworks.com/help/simscape/ref/pressuresourcetl.html) block to mimic a load, we use an [Inport](https://www.mathworks.com/help/simulink/slref/inport.html) block to load a test vector into the model. To test the pump range, we ramp up the load beyond the expected maximum pressure drop. You can also validate the pump curve with the current parameterization by right-clicking the pump component and selecting **Fluids-\>Plot Pump Characteristics***:*
 %[text] ![](text:image:9b1e)
 %[text] Note, that the [Simulink-PS Converter](https://www.mathworks.com/help/simscape/ref/simulinkpsconverter.html) block attached to the pump velocity input is configured to filter the input signal (indicated by the black dot on the block icon), this is required to solve this model. This stems from how Simscape is solved and that when converting a Simulink signal to a PS signal, the relevant state is reduced and missing information. To resolve this, in the *Input Handling* section in the block the `Filtering and derivatives` parameter is set to `Filter input, derivatives calculated` (alternatively, signal derivatives could be provided as additional information). Here, `First-order filtering` is chosen with a small `Input filtering time constant` so that the filtered input is close to the actual input signal. (Read more in the [Input Handling](https://www.mathworks.com/help/simscape/ref/simulinkpsconverter.html#mw_15965d02-3ff1-479a-84af-76f3d171f8ca) section in the documentation of the block). 
 filterConst = simscape.Value(0.002, "s");
@@ -224,8 +224,8 @@ legend("Volume_{Accumulator,Liquid}") %[output:074edd3b]
 %[text] For the given scenario, the fluid heats up to well over 60°C and the pressure and volume stay well within given ranges. 
 %%
 %[text] ## Next Steps
-%[text] - Move to next step: [Radiator](file:.\Radiator.m)
-%[text] - Go back to main script: [Design Cooling System](file:.\DesignCoolingSystem.m) \
+%[text] - Move to next step: [Radiator](file:Radiator.m)
+%[text] - Go back to main script: [Design Cooling System](file:DesignCoolingSystem.m) \
 
 %[appendix]{"version":"1.0"}
 %---

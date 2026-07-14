@@ -54,10 +54,10 @@ hold off %[output:66916f52]
 %[text] From the graph, we can verify that the outlet temperature converges to the desired maximum outlet temperature and that the internal node value is consistent with the outlet node (**B**) temperature. 
 %%
 %[text] #### Sizing the Cold Plate 
-%[text] The X-ray device will dissipate its heat through a cold plate. It must be sized in such a way that its overall thermal performance meets the requirements in terms of maximum device temperature. In the [Cold Plate Parameterization](file:.\ColdPlateParameterization.m) script we show a trade study for a U-shaped channel cold plate configuration vs. a parallel channel configuration for different geometric parameters. In that script, we determined the parallel channel configuration was the best for our use case. We will continue with that configuration:
+%[text] The X-ray device will dissipate its heat through a cold plate. It must be sized in such a way that its overall thermal performance meets the requirements in terms of maximum device temperature. In the [Cold Plate Parameterization](file:ColdPlateParameterization.m) script we show a trade study for a U-shaped channel cold plate configuration vs. a parallel channel configuration for different geometric parameters. In that script, we determined the parallel channel configuration was the best for our use case. We will continue with that configuration:
 %[text] ![](text:image:0bc8)
 %[text] 
-%[text] The parameters selected (based on [Cold Plate Parameterization](file:.\ColdPlateParameterization.m)) are:
+%[text] The parameters selected (based on [Cold Plate Parameterization](file:ColdPlateParameterization.m)) are:
 %[text:table]{"columnWidths":[407,319],"ignoreHeader":true}
 %[text] | Length cold plate (mm) | 240 |
 %[text] | --- | --- |
@@ -67,7 +67,7 @@ hold off %[output:66916f52]
 %[text] | Channel margin (mm) | 10 |
 %[text] | Channel pitch (mm) | Channel width + 3 mm |
 %[text] | Channel roughness ($\\mu${"editStyle":"visual"}m) | 15 |
-%[text] | Thickness coldplate (mm) | 5 |
+%[text] | Thickness cold plate (mm) | 5 |
 %[text] | Device diameter (mm) | 75 |
 %[text] | Thermal conductivity of cold plate (W/(m\*K)) | 167 |
 %[text:table]
@@ -84,7 +84,7 @@ deviceD             = simscape.Value(75, "mm");
 cpK                 = simscape.Value(167, "W/(m*K)");
 %[text] For the parallel channel configuration, we will use a [Pipe (TL)](https://www.mathworks.com/help/hydro/ref/pipetl.html) from the Fluids library to represent the geometry. Note that this is different from the previously used pipe block, this version has more parameterization options, for example for the type of cross-sectional geometry or models for calculating friction losses and pipe wall heat transfer. Assuming the flow is split evenly between all flow channels and the heat is evenly distributed to each channel, we can use a single channel to represent the entire geometry. If there are `N` channels, then the flow through each channel (heat and fluid) will be `1/N` of the total. To model this, we will use an additional custom library containing two blocks, **Thermal Splitter** and **Flow** **Splitter**:
 open_system(projRoot + filesep + "Libraries" + filesep + "supplemental_lib.slx")
-%[text] See this schematic of how to use this approach and how it compares with modeling the individual parallel flow paths. If you want to investigate this model, open [example\_FlowSplitter.slx](file:..\Models\example_FlowSplitter.slx). 
+%[text] See this schematic of how to use this approach and how it compares with modeling the individual parallel flow paths. If you want to investigate this model, open [example\_FlowSplitter.slx](file:example_FlowSplitter.slx). 
 %[text] ![](text:image:9f87)
 %%
 %[text] The flow splitter acts as a multiplier or divider, to make sure in the thermal liquid domain, the flow is divided at the pipe input/and multiplied at output. Similarly, the splitter in the thermal domain, will multiply or divide the heat flow rate. Using this approach will result in a smaller and more performant model and is valid under the assumptions we made above. 
@@ -140,8 +140,8 @@ disp(dpColdPlate(end)) %[output:543a8cf5]
 %[text] At steady state for the maximum flow rate, the current cold plate design produces a pressure drop of roughly 0.013 bar. 
 %%
 %[text] ## Next Steps
-%[text] - Move to next step: [Pump](file:.\Pump.m)
-%[text] - Go back to main script: [Design Cooling System](file:.\DesignCoolingSystem.m) \
+%[text] - Move to next step: [Pump](file:Pump.m)
+%[text] - Go back to main script: [Design Cooling System](file:DesignCoolingSystem.m) \
 
 %[appendix]{"version":"1.0"}
 %---
