@@ -158,7 +158,7 @@ load(projRoot + filesep + "Data" + filesep + "fanData.mat")
 open_system("example_Fan")
 %[text] ![](text:image:19df)
 %%
-%[text] With the data provided, we can select the `Fan parameterization` method `2-D tabulated data - static pressure vs. shaft speed and flow rate` and the `Shaft power specification` to `Brake power`. As with the pump, you can also validate the fan curve with the current parameterization by by going to the *Plot* section in the block dialog and selecting the *Plot* button next to Fan `characteristics`:
+%[text] With the data provided, we can select the `Fan parameterization` method `2-D tabulated data - static pressure vs. shaft speed and flow rate` and the `Shaft power specification` to `Brake power`. As with the pump, you can also validate the fan curve with the current parameterization by by going to the *Plot* section in the block dialog and selecting the *Plot* button next to Fan `characteristics`: 
 %[text] ![](text:image:1ff5)
 %[text] 
 dpReq          = simscape.Value(700, "Pa");          
