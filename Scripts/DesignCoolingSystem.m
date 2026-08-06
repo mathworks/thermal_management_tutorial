@@ -32,7 +32,7 @@ open_system("RadiatorSubsystem")
 open_system("PipingSubsystem")
 open_system("PumpSubsystem")
 open_system("example_System_Assembly")
-%[text] Note that the pump model is configured to use rotational velocity as an input. This will allow us to connect it to a test input and a control output. Also, the pump inertia's **Rotational velocity** initial value is set to a `Priority` of `None`, since this will be directly connected to a velocity input. Similarly, the heat input to the device mass and cold plate is configured to receive an external input from a Simulink signal, so we can later define different operating scenarios. 
+%[text] Note that the pump model is configured to use rotational velocity as an input. This will allow us to connect it to a test input and a control output. Also, the pump inertia's **Rotational velocity** initial value is set to 0 and a `Priority` of `None`, since this will be directly connected to a velocity input. The same is true for the fan inertia's **Rotational velocity**. Similarly, the heat input to the device mass and cold plate is configured to receive an external input from a Simulink signal, so we can later define different operating scenarios. 
 %[text] Next, we connect all the Subsystem References from above into a single model with open boundary conditions. In this model, the Inlet Boundary Conditions are set to 2 bar and 25 °C. We actuate the pump to a speed that produces the desired flow rate at the maximum design heat load. We use a step function so the system can start in a relaxed state. All the parameters we have created for the subsystems during component sizing are loaded from the file *coolingSystemParams.mat*. 
 initializeParameters("CoolingSystem")                    
 %[text] ![](text:image:2aaa)
@@ -90,7 +90,7 @@ disp(outputTable) %[output:9dd73486]
 %[text] Now that we’re satisfied with the open-loop model response, we can close the fluid loop by removing the Inlet and Outlet Boundary Condition blocks and connecting the B port of the Piping subsystem to the A port of the Pump subsystem. This closed-loop model will allow us to start designing our controls for the system. Having the loop closed is a substantial change from open boundary conditions because the total amount of fluid in the system becomes finite. When we close the loop, we need to add a tank or accumulator to ensure there is enough capacity in the system to absorb pressure and temperature fluctuations from the dynamics of the system.
 open_system("example_System_Assembly_ClosedLoop")   
 %[text] ![](text:image:5d28)
-%[text] In this version, the piping subsystem includes the accumulator component which we parameterized in the final section of [Pump.m](file:.\Pump.m).
+%[text] In this version, the piping subsystem includes the accumulator component which we parameterized in the final section of [Pump.m](file:.\\Pump.m).
 open_system("example_System_Assembly_ClosedLoop/PipingAccumulator")   
 %[text] ![](text:image:7366)
 %[text] Now we simulate the closed loop model for two hours and plot the temperatures and pressures. Here we apply step changes to the Pump and Fan and the maximum (2 kW) heat load to the cold plate.
