@@ -7,7 +7,7 @@ Fluids&trade; model for a liquid cooling system based on a small set of
 requirements. We show the recommended procedures for building test 
 harnesses for and sizing components, parameterizing the various elements 
 from known data, e.g., dimensions, data sheets, etc., and implementing 
-rudimetary controls for the system. It is intended as a reference for 
+rudimentary controls for the system. It is intended as a reference for 
 learning Simscape Fluids and understanding how to approach system-level 
 thermal design. 
 
